@@ -1,0 +1,7 @@
+node_modules/
+allure-report/
+allure-results/
+bin/
+obj/
+.playwright/
+bin/
