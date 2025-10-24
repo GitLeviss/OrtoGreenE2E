@@ -27,7 +27,8 @@ namespace OrtogreenE2E.pages
             try
             {
                 //await page.PauseAsync();
-
+                Random random = new Random();
+                int randomNumber = random.Next();
                 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Novo Dentista" }).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Dr(a). Nome Completo" }).FillAsync(dentistName);
@@ -38,7 +39,7 @@ namespace OrtogreenE2E.pages
                 await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisCRO" }).GetByRole(AriaRole.Textbox).Nth(1).ClickAsync();
                 await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisCRO" }).GetByRole(AriaRole.Textbox).Nth(1).FillAsync("São Paulo");
                 await page.GetByText("São Paulo (SP)").ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync("teste12345@email.com");
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync($"teste{randomNumber}@email.com");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Mínimo 8 caracteres" }).FillAsync("Teste@123");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Digite a senha novamente" }).FillAsync("Teste@123");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).ClickAsync();
