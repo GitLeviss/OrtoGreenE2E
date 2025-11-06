@@ -26,26 +26,29 @@ namespace OrtogreenE2E.pages
         {
             try
             {
-                //await page.PauseAsync();
                 Random random = new Random();
                 int randomNumber = random.Next();
-                
+
+
                 await page.GetByRole(AriaRole.Button, new() { Name = "Novo Dentista" }).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Dr(a). Nome Completo" }).FillAsync(dentistName);
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "-00" }).FillAsync("38188785873");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9531-29062");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "123456" }).ClickAsync();
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).ClickAsync();
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9531-89062");
+                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *Selecione a unidadeCRO *123456UF do CRO *" }).GetByRole(AriaRole.Textbox).First.ClickAsync();
+                await page.GetByText("QualityAssurance").Nth(1).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "123456" }).FillAsync("321456");
-                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisCRO" }).GetByRole(AriaRole.Textbox).Nth(1).ClickAsync();
-                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisCRO" }).GetByRole(AriaRole.Textbox).Nth(1).FillAsync("São Paulo");
+                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *QualityAssuranceCRO *UF do CRO *StatusAtivo" }).GetByRole(AriaRole.Textbox).Nth(2).ClickAsync();
+                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *QualityAssuranceCRO *UF do CRO *StatusAtivo" }).GetByRole(AriaRole.Textbox).Nth(2).FillAsync("São Paulo");
                 await page.GetByText("São Paulo (SP)").ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync($"teste{randomNumber}@email.com");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Mínimo 8 caracteres" }).FillAsync("Teste@123");
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Mínimo 8 caracteres" }).PressAsync("Tab");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Digite a senha novamente" }).FillAsync("Teste@123");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Dentista" }).ClickAsync();
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).FillAsync("Teste");
+                await page.GetByRole(AriaRole.Button, new() { Name = "Criar Dentista" }).ClickAsync();
                 await Expect(page.GetByText("Dentista criado com sucesso!")).ToBeVisibleAsync();
+
                 
 
             }
