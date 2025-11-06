@@ -31,8 +31,14 @@ namespace OrtogreenE2E.runner
                 Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" }
             };
 
+            var contextOptions = new BrowserNewContextOptions()
+            {
+                ViewportSize = new ViewportSize() { Width = 1920, Height = 1080 },
+                IgnoreHTTPSErrors = true
+            };
+
             browser = await playwright.Chromium.LaunchAsync(launchOptions);
-            context = await browser.NewContextAsync();
+            context = await browser.NewContextAsync(contextOptions);
             var page = await context.NewPageAsync();
 
             var config = new ConfigurationManager();

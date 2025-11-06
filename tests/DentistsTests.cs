@@ -12,7 +12,7 @@ namespace OrtogreenE2E.tests
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
     [Category("Criticality: Critical")]
-    [Category("Suite: Patients")]
+    [Category("Suite: Dentists")]
     [Category("Regression Tests")]
     public class DentistsTests : TestBase
     {

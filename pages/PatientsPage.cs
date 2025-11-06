@@ -22,7 +22,6 @@ namespace OrtogreenE2E.pages
 
         public async Task RegisterNewPatient()
         {
-            //await page.PauseAsync();
 
             try
             {
@@ -63,12 +62,9 @@ namespace OrtogreenE2E.pages
         {
             try
             {
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por nome, email," }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por nome, email," }).FillAsync("Paciente Testes");
-                await page.Locator(".text-slate-400").First.ClickAsync();
-                await Expect(page.GetByText("Paciente Testes")).ToBeVisibleAsync();
-                await page.GetByText("Ativo", new() { Exact = true }).ClickAsync();
-                await Expect(page.GetByText("Ativo", new() { Exact = true })).ToBeVisibleAsync();
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName);
+                await Expect(page.GetByText("Paciente Testes").First).ToBeVisibleAsync();
+
             }
             catch
             {
@@ -79,8 +75,9 @@ namespace OrtogreenE2E.pages
         {
             try
             {
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por nome, email," }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por nome, email," }).FillAsync("Paciente Testes");
+                //await page.PauseAsync();
+
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName);
                 await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName + " Editado");
@@ -98,7 +95,7 @@ namespace OrtogreenE2E.pages
                 {
 
                     await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
-                    await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por nome, email," }).FillAsync(patientName + " Editado");
+                    await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName + " Editado");
                     await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
                     await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
                     await page.GetByText("Paciente deletado com sucesso!").ClickAsync();

@@ -58,6 +58,20 @@ namespace OrtogreenE2E.utils
                 throw new PlaywrightException($"Don´t possible validate the url: {expectedUrl} on step: {step}");
             }
         }
+        public async Task SelectOptionAsync(string locator,string option, string step)
+        {
+            try
+            {
+                await page.Locator(locator).SelectOptionAsync(option);
+            }
+            catch   
+            {
+                throw new PlaywrightException("Don´t Possible Found the element: " + locator + " to select option on step: " + step);
+            }
+        }
+
+
+
 
 
 

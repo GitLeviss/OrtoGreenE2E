@@ -13,7 +13,7 @@ namespace OrtogreenE2E.tests
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
     [Category("Criticality: Critical")]
-    [Category("Suite: Patients")]
+    [Category("Suite: Type Schedule")]
     [Category("Regression Tests")]
     public class TypeScheduleTests : TestBase
     {

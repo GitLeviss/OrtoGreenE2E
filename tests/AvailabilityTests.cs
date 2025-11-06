@@ -12,7 +12,7 @@ namespace OrtogreenE2E.tests
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
     [Category("Criticality: Critical")]
-    [Category("Suite: Patients")]
+    [Category("Suite: Availability")]
     [Category("Regression Tests")]
     public class AvailabilityTests : TestBase
     {
