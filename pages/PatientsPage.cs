@@ -6,16 +6,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OrtoGreenE2E.locators;
 
 namespace OrtogreenE2E.pages
 {
     public class PatientsPage
     {
         private readonly IPage page;
+        Utils util;
+        GeneralElements gen = new GeneralElements();
 
         public PatientsPage(IPage page) 
         {
-            this.page = page;            
+            this.page = page;
+            util = new Utils(page);
         }
 
         string patientName = "Paciente Testes";
@@ -30,8 +34,8 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName);
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync("emailteste@email.com");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9341-25767");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Selecione a data" }).ClickAsync();
-                await page.Locator("div:nth-child(32) > .n-date-panel-date__trigger").ClickAsync();
+                await util.Write(gen.LocatorPlaceholder("Selecione a data"), "29/01/2003","Write Bday on input");
+                //await page.PauseAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "-000" }).FillAsync("06240090");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome da rua" }).FillAsync("Rua pariquera açu");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Número" }).FillAsync("127");
