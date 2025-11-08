@@ -16,7 +16,7 @@ namespace OrtogreenE2E.pages
         Utils util;
         GeneralElements gen = new GeneralElements();
 
-        public PatientsPage(IPage page) 
+        public PatientsPage(IPage page)
         {
             this.page = page;
             util = new Utils(page);
@@ -34,7 +34,7 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName);
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync("emailteste@email.com");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9341-25767");
-                await util.Write(gen.LocatorPlaceholder("Selecione a data"), "29/01/2003","Write Bday on input");
+                await util.Write(gen.LocatorPlaceholder("Selecione a data"), "29/01/2003", "Write Bday on input");
                 //await page.PauseAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "-000" }).FillAsync("06240090");
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome da rua" }).FillAsync("Rua pariquera açu");
@@ -49,16 +49,16 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).FillAsync("apenas testando");
                 await page.GetByRole(AriaRole.Button, new() { Name = "Criar Paciente" }).ClickAsync();
                 await Expect(page.GetByText("Paciente criado com sucesso!")).ToBeVisibleAsync();
-               
+
             }
             catch
             {
                 throw new PlaywrightException("Don´t possible Register a new Patient");
             }
 
-            
 
-            
+
+
 
         }
 
@@ -82,7 +82,7 @@ namespace OrtogreenE2E.pages
                 //await page.PauseAsync();
 
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName);
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
+                await page.Locator("//div[text()='Paciente Testes']/ancestor::tr//span[text()='Editar']").ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName + " Editado");
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
@@ -94,22 +94,22 @@ namespace OrtogreenE2E.pages
             }
         }
         public async Task DeletePatient()
-        {            
-                try
-                {
+        {
+            try
+            {
 
-                    await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
-                    await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName + " Editado");
-                    await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                    await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                    await page.GetByText("Paciente deletado com sucesso!").ClickAsync();
-                    await page.GetByText("Paciente excluído com sucesso").ClickAsync();
-                }
-                catch
-                {
-                    throw new PlaywrightException("Don´t possible delete Patient");
-                }
-            
+                await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName + " Editado");
+                await page.Locator("//div[text()='Paciente Testes']/ancestor::tr//span[text()='Excluir']").ClickAsync();
+                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
+                await page.GetByText("Paciente deletado com sucesso!").ClickAsync();
+                await page.GetByText("Paciente excluído com sucesso").ClickAsync();
+            }
+            catch
+            {
+                throw new PlaywrightException("Don´t possible delete Patient");
+            }
+
         }
 
 
