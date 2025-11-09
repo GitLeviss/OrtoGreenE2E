@@ -36,9 +36,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Tipo de agendamento criado com sucesso!")).ToBeVisibleAsync();
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible create a new schedule type");
+                throw new PlaywrightException("Don´t possible create a new schedule type" + ex.Message);
             }
 
         }
@@ -54,9 +54,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText(typeName)).ToBeVisibleAsync();
                 await Expect(page.GetByTitle("Ativo")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-               throw new  PlaywrightException("Don´t possible consult a type schedule");
+               throw new  PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
             }
             
         }
@@ -74,9 +74,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Tipo de agendamento atualizado com sucesso", new() { Exact = true })).ToBeVisibleAsync();
                 await Expect(page.GetByText("Tipo de agendamento atualizado com sucesso!")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible consult a type schedule");
+                throw new PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
             }
         }
         public async Task DeleteTypeSchedule()
@@ -94,9 +94,9 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync("Agendamento Teste Editado");
                 await Expect(page.GetByText("Não há dados")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible consult a type schedule");
+                throw new PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
             }
         }
 

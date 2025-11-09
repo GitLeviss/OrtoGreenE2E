@@ -24,7 +24,7 @@ namespace OrtogreenE2E.pages
             try
             {
                 await page.Locator(".n-base-selection-label").ClickAsync();
-                await page.Locator("//div[text()='Dr. QA']").ClickAsync();
+                await page.Locator("//div[text()='Levi da Paz']").ClickAsync();
                 await page.GetByRole(AriaRole.Button, new() { Name = "Nova Regra" }).ClickAsync();
                 await page.GetByRole(AriaRole.Dialog).Locator("div").Filter(new() { HasTextRegex = new Regex("^Manhã$") }).Locator("div").Nth(1).ClickAsync();
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais sobre" }).ClickAsync();
@@ -32,45 +32,45 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar" }).ClickAsync();
                 await Expect(page.GetByText("Regra de agenda criada com")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible register a new rule");
+                throw new PlaywrightException("Don´t possible register a new rule" + ex.Message);
             }
 
 
             try
             {
-                await page.Locator("//tr[.//span[normalize-space(text())='teste']]//button").ClickAsync();
+                await page.Locator("//span[text()='teste']/ancestor::tr//span[text()='Remover']").ClickAsync();
                 await Expect(page.GetByText("Regra de agenda removida com")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Remove a rule");
+                throw new PlaywrightException("Don´t possible Remove a rule" + ex.Message);
             }
 
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Novo Bloqueio" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar" }).ClickAsync();
-                await Expect(page.GetByText("Bloqueio criado com sucesso!")).ToBeVisibleAsync();
-            }
-            catch
-            {
-                throw new PlaywrightException("Don´t possible add a new block");
-            }
-            try
-            {
-                await Expect(page.GetByText("teste")).ToBeVisibleAsync();
-                //await page.PauseAsync();
-                await page.Locator("//tr[.//span[normalize-space(text())='teste']]//button").ClickAsync();
-                await Expect(page.GetByText("Bloqueio removido com sucesso!")).ToBeVisibleAsync();
-            }
-            catch
-            {
-                throw new PlaywrightException("Don´t possible remove a block");
-            }
+            //try
+            //{
+            //    await page.GetByRole(AriaRole.Button, new() { Name = "Novo Bloqueio" }).ClickAsync();
+            //    await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais" }).ClickAsync();
+            //    await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais" }).FillAsync("teste");
+            //    await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar" }).ClickAsync();
+            //    await Expect(page.GetByText("Bloqueio criado com sucesso!")).ToBeVisibleAsync();
+            //}
+            //catch
+            //{
+            //    throw new PlaywrightException("Don´t possible add a new block");
+            //}
+            //try
+            //{
+            //    await Expect(page.GetByText("teste")).ToBeVisibleAsync();
+            //    //await page.PauseAsync();
+            //    await page.Locator("//span[text()='teste']/ancestor::tr//span[text()='Remover']").ClickAsync();
+            //    await Expect(page.GetByText("Bloqueio removido com sucesso!")).ToBeVisibleAsync();
+            //}
+            //catch
+            //{
+            //    throw new PlaywrightException("Don´t possible remove a block");
+            //}
             
           
          

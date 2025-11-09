@@ -35,9 +35,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
                 await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityOrto");
+                throw new PlaywrightException("Don´t possible Create a new SpecialityOrto" + ex.Message);
             }
 
 
@@ -54,9 +54,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
                 await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
 }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityOrto");
+                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityOrto" + ex.Message);
             }
         }
        
@@ -73,9 +73,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyOrtoName + " teste Edição");
                 await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Edit SpecialityOrto");
+                throw new PlaywrightException("Don´t possible Edit SpecialityOrto" + ex.Message);
             }
         }
         public async Task DeleteSpecialityOrto()
@@ -90,9 +90,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyOrtoName + " teste Edição");
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Delete SpecialityOrto");
+                throw new PlaywrightException("Don´t possible Delete SpecialityOrto" + ex.Message);
             }
         }
         public async Task RegisterSpecialityGen()
@@ -106,9 +106,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
                 await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityGen");
+                throw new PlaywrightException("Don´t possible Create a new SpecialityGen" + ex.Message);
             }
 
 
@@ -125,9 +125,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
                 await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
 }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityGen");
+                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityGen" + ex.Message);
             }
         }
        
@@ -144,9 +144,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyGeneralClinicName + " teste Edição");
                 await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Edit SpecialityGen");
+                throw new PlaywrightException("Don´t possible Edit SpecialityGen" + ex.Message);
             }
         }
         public async Task DeleteSpecialityGen()
@@ -161,9 +161,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyGeneralClinicName + " teste Edição");
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Delete SpecialityGen");
+                throw new PlaywrightException("Don´t possible Delete SpecialityGen" + ex.Message);
             }
         }
         public async Task RegisterSpecialityEndo()
@@ -177,9 +177,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
                 await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityEndo");
+                throw new PlaywrightException("Don´t possible Create a new SpecialityEndo" + ex.Message);
             }
 
 
@@ -196,9 +196,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
                 await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
 }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityEndo");
+                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityEndo" + ex.Message);
             }
         }
        
@@ -215,9 +215,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyEndoName + " teste Edição");
                 await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Edit SpecialityEndo");
+                throw new PlaywrightException("Don´t possible Edit SpecialityEndo" + ex.Message);
             }
         }
         public async Task DeleteSpecialityEndo()
@@ -232,9 +232,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyEndoName + " teste Edição");
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Delete SpecialityEndo");
+                throw new PlaywrightException("Don´t possible Delete SpecialityEndo" + ex.Message);
             }
         }
 
@@ -250,9 +250,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
                 await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityImpla");
+                throw new PlaywrightException("Don´t possible Create a new SpecialityImpla" + ex.Message);
             }
 
 
@@ -269,9 +269,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
                 await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
 }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityImpla");
+                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityImpla" + ex.Message);
             }
         }
        
@@ -288,9 +288,9 @@ namespace OrtoGreenE2E.pages
                 await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyImplaName + " teste Edição");
                 await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Edit SpecialityImpla");
+                throw new PlaywrightException("Don´t possible Edit SpecialityImpla" + ex.Message);
             }
         }
         public async Task DeleteSpecialityImpla()
@@ -305,9 +305,9 @@ namespace OrtoGreenE2E.pages
                 await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyImplaName + " teste Edição");
                 await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Delete SpecialityImpla");
+                throw new PlaywrightException("Don´t possible Delete SpecialityImpla" + ex.Message);
             }
         }
 
