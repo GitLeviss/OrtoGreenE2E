@@ -1,5 +1,9 @@
-﻿using Microsoft.Playwright;
+//testbase
+
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +12,14 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.runner
 {
+    [AllureNUnit]
     public class TestBase
     {
 
         private IPlaywright? playwright;
         private IBrowser? browser;
         private IBrowserContext? context;
+        [AllureBefore("Setup session")]
 
         protected async Task<IPage> OpenBrowserAsync()
         {
@@ -26,8 +32,8 @@ namespace OrtogreenE2E.runner
 
             var launchOptions = new BrowserTypeLaunchOptions
             {
-                Headless = false, // Headless no CI, pode ser false local
-                                  //Headless = isCi,
+                Headless = true, // Headless no CI, pode ser false local
+                                 //Headless = isCi,
                 Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" }
             };
 
@@ -47,6 +53,7 @@ namespace OrtogreenE2E.runner
             await page.GotoAsync(linkOrtogreen);
             return page;
         }
+        [AllureAfter("Dispose session")]
 
         protected async Task CloseBrowserAsync()
         {

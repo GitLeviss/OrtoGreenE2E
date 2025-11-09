@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
-    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]   
     [Category("Criticality: Critical")]
     [Category("Suite: Arrivals")]
     [Category("Regression Tests")]

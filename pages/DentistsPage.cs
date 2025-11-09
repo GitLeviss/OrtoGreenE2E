@@ -52,9 +52,9 @@ namespace OrtogreenE2E.pages
                 
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible register a new dentist");
+                throw new PlaywrightException("Don´t possible register a new dentist" + ex.Message);
             }
 
         }
@@ -68,9 +68,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.Locator("(//td//span//span//div)[1]")).ToHaveTextAsync(dentistName);
                 await Expect(page.Locator("(//td)[6]//div//sup//span[1]")).ToHaveTextAsync("Ativo");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible consult dentist");
+                throw new PlaywrightException("Don´t possible consult dentist" + ex.Message);
             }
         }
         public async Task EditDentist()
@@ -83,9 +83,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Dentista atualizado com")).ToBeVisibleAsync();
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("");
+                throw new PlaywrightException("Don´t possible Edit dentist" + ex.Message);
             }
         }
         public async Task DeleteDentist()
@@ -101,9 +101,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Não há dados")).ToBeVisibleAsync();
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible delete dentist");
+                throw new PlaywrightException("Don´t possible delete dentist" + ex.Message);
             }
         }
 

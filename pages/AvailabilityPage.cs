@@ -32,9 +32,9 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar" }).ClickAsync();
                 await Expect(page.GetByText("Regra de agenda criada com")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible register a new rule");
+                throw new PlaywrightException("Don´t possible register a new rule" + ex.Message);
             }
 
 
@@ -43,9 +43,9 @@ namespace OrtogreenE2E.pages
                 await page.Locator("//span[text()='teste']/ancestor::tr//span[text()='Remover']").ClickAsync();
                 await Expect(page.GetByText("Regra de agenda removida com")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Remove a rule");
+                throw new PlaywrightException("Don´t possible Remove a rule" + ex.Message);
             }
 
             //try

@@ -1,4 +1,6 @@
-﻿using Microsoft.Playwright;
+﻿//patientspage
+
+using Microsoft.Playwright;
 using static Microsoft.Playwright.Assertions;
 using OrtogreenE2E.utils;
 using System;
@@ -51,9 +53,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Paciente criado com sucesso!")).ToBeVisibleAsync();
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Register a new Patient");
+                throw new PlaywrightException("Don´t possible Register a new Patient" + ex.Message);
             }
 
 
@@ -70,9 +72,9 @@ namespace OrtogreenE2E.pages
                 await Expect(page.GetByText("Paciente Testes").First).ToBeVisibleAsync();
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Consult a Patient");
+                throw new PlaywrightException("Don´t possible Consult a Patient" + ex.Message);
             }
         }
         public async Task EditPatient()
@@ -88,9 +90,9 @@ namespace OrtogreenE2E.pages
                 await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
                 await Expect(page.GetByText("Paciente atualizado com")).ToBeVisibleAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible Edit a Patient");
+                throw new PlaywrightException("Don´t possible Edit a Patient" + ex.Message);
             }
         }
         public async Task DeletePatient()
@@ -105,9 +107,9 @@ namespace OrtogreenE2E.pages
                 await page.GetByText("Paciente deletado com sucesso!").ClickAsync();
                 await page.GetByText("Paciente excluído com sucesso").ClickAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t possible delete Patient");
+                throw new PlaywrightException("Don´t possible delete Patient" + ex.Message);
             }
 
         }
