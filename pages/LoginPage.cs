@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.locators;
@@ -64,6 +65,7 @@ namespace OrtogreenE2E.pages
 
 
         }
+        [AllureStep("Do Login")]
         public async Task Login()
         {
             try

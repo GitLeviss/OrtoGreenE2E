@@ -1,4 +1,6 @@
 ﻿
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
@@ -10,18 +12,21 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
-    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
+    [AllureOwner("Levi")]
     [Category("Criticality: Critical")]
-    [Category("Suite: Patients")]
+    [AllureSuite("Patients")]
     [Category("Regression Tests")]
+    [AllureNUnit]
     public class PatientsTests : TestBase
     {
-        
+
 
         private IPage page;
 
         [SetUp]
+        [AllureBefore]
         public async Task Setup()
         {
             page = await OpenBrowserAsync();
@@ -30,30 +35,35 @@ namespace OrtogreenE2E.tests
             await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
         }
         [TearDown]
+        [AllureAfter]
         public async Task TearDown()
         {
             await CloseBrowserAsync();
         }
 
         [Test, Order(1)]
+        [AllureName("Should Register a Patients")]
         public async Task Should_Register_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.RegisterNewPatient();
         }
         [Test, Order(2)]
+        [AllureName("Should Consult a Patients")]
         public async Task Should_Consult_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.ConsultPatient();
         }
         [Test, Order(3)]
+        [AllureName("Should Edit a Patients")]
         public async Task Should_Edit_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.EditPatient();
         }
         [Test, Order(4)]
+        [AllureName("Should Delete a Patients")]
         public async Task Should_Delete_a_Patients()
         {
             var patients = new PatientsPage(page);

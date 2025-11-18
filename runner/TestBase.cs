@@ -4,65 +4,116 @@ using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
+using OrtoGreenE2E.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using zCustodiaUi.utils;
 
 namespace OrtogreenE2E.runner
 {
-    [AllureNUnit]
     public class TestBase
     {
-
+        protected IPage page;
         private IPlaywright? playwright;
         private IBrowser? browser;
         private IBrowserContext? context;
-        [AllureBefore("Setup session")]
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            VideoHelper.ClearOldVideos();
+        }
 
         protected async Task<IPage> OpenBrowserAsync()
         {
-
             playwright = await Playwright.CreateAsync();
 
-            // Detecta CI (Azure DevOps define TF_BUILD=true)
-            var isCi = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CI"))
-            || string.Equals(Environment.GetEnvironmentVariable("TF_BUILD"), "True", StringComparison.OrdinalIgnoreCase);
+            var isCi = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CI")) ||
+                       string.Equals(Environment.GetEnvironmentVariable("TF_BUILD"), "True", StringComparison.OrdinalIgnoreCase);
 
             var launchOptions = new BrowserTypeLaunchOptions
             {
-                Headless = true, // Headless no CI, pode ser false local
-                                 //Headless = isCi,
+                Headless = true,
                 Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" }
             };
 
-            var contextOptions = new BrowserNewContextOptions()
+            browser = await playwright.Chromium.LaunchAsync(launchOptions);
+
+            var videosDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "videos");
+            Directory.CreateDirectory(videosDir);
+
+            var contextOptions = new BrowserNewContextOptions
             {
-                ViewportSize = new ViewportSize() { Width = 1920, Height = 1080 },
-                IgnoreHTTPSErrors = true
+                ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
+                IgnoreHTTPSErrors = true,
+                RecordVideoDir = videosDir,
+                RecordVideoSize = new RecordVideoSize { Width = 1366, Height = 768 }
             };
 
-            browser = await playwright.Chromium.LaunchAsync(launchOptions);
             context = await browser.NewContextAsync(contextOptions);
-            var page = await context.NewPageAsync();
+            page = await context.NewPageAsync();
 
             var config = new ConfigurationManager();
             config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            var linkOrtogreen = config["Links:Ortogreen"] ?? throw new InvalidOperationException("Ortogreen link not found in configuration");
-            await page.GotoAsync(linkOrtogreen);
+            var linkPortal = config["Links:Ortogreen"];
+            await page.GotoAsync(linkPortal!);
+
             return page;
         }
-        [AllureAfter("Dispose session")]
 
         protected async Task CloseBrowserAsync()
         {
-            if (context != null)
-                await context.CloseAsync();
-            if (browser != null)
-                await browser.CloseAsync();
-            playwright?.Dispose();
+            var status = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+
+            try
+            {
+                if (page != null)
+                {
+                    await VideoUtils.ForceVideoFinalization(page);
+                }
+
+                if (context != null)
+                {
+                    await context.CloseAsync();
+                }
+
+                if (page != null)
+                {
+                    await VideoHelper.AttachVideoAsync(page, status);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar vídeo no teardown: {ex.Message}");
+            }
+            finally
+            {
+                try
+                {
+                    if (browser != null)
+                    {
+                        await browser.CloseAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao fechar browser: {ex.Message}");
+                }
+
+                try
+                {
+                    playwright?.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao dispose playwright: {ex.Message}");
+                }
+            }
         }
+
 
     }
 }

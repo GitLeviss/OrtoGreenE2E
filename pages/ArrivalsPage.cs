@@ -1,11 +1,12 @@
-﻿using Microsoft.Playwright;
-using static Microsoft.Playwright.Assertions;
+﻿using Allure.NUnit.Attributes;
+using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Playwright.Assertions;
 
 namespace OrtoGreenE2E.pages
 {
@@ -21,7 +22,7 @@ namespace OrtoGreenE2E.pages
         }
 
         string patientName = "User Teste";
-
+        [AllureStep("ScheduleAppointment")]
         public async Task ScheduleAppointment()
         {
             try
@@ -53,7 +54,7 @@ namespace OrtoGreenE2E.pages
 
 
         }
-
+        [AllureStep("Consult Existing Appointment")]
         public async Task ConsultExistingAppointment()
         {
             try
@@ -70,6 +71,7 @@ namespace OrtoGreenE2E.pages
                 throw new PlaywrightException("Don´t possible Consult a Existing appointment" + ex.Message);
             }
         }
+        [AllureStep("Checkin")]
         public async Task Checkin()
         {
             try
@@ -92,6 +94,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
+        [AllureStep("Started")]
         public async Task Started()
         {
             try
@@ -109,6 +112,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
+        [AllureStep("In Progress")]
         public async Task InProgress()
         {
             try
@@ -125,6 +129,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
+        [AllureStep("Canceled")]
         public async Task Canceled()
         {
             try
