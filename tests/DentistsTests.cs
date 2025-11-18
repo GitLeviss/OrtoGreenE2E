@@ -1,4 +1,6 @@
-﻿using Microsoft.Playwright;
+﻿using Allure.NUnit;
+using Allure.NUnit.Attributes;
+using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
 using System;
@@ -9,18 +11,21 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
-    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
+    [AllureOwner("Levi")]
     [Category("Criticality: Critical")]
-    [Category("Suite: Dentists")]
+    [AllureSuite("Dentists")]
     [Category("Regression Tests")]
+    [AllureNUnit]
     public class DentistsTests : TestBase
     {
-        
+
 
         private IPage page;
 
         [SetUp]
+        [AllureBefore]
         public async Task Setup()
         {
             page = await OpenBrowserAsync();
@@ -30,36 +35,41 @@ namespace OrtogreenE2E.tests
             await page.GetByRole(AriaRole.Link, new() { Name = "Dentistas" }).ClickAsync();
         }
         [TearDown]
+        [AllureAfter]
         public async Task TearDown()
         {
             await CloseBrowserAsync();
         }
 
         [Test, Order(1)]
+        [AllureName("Should Register a New Dentist")]
         public async Task Should_Register_a_New_Dentist()
         {
             var dentist = new DentistsPage(page);
             await dentist.RegisterDentist();
         }
         [Test, Order(2)]
+        [AllureName("Should Consult a Existing Dentist")]
         public async Task Should_Consult_Dentist()
         {
             var dentist = new DentistsPage(page);
             await dentist.ConsultDentist();
         }
         [Test, Order(3)]
+        [AllureName("Should Edit Dentist")]
         public async Task Should_Edit_Dentist()
         {
             var dentist = new DentistsPage(page);
             await dentist.EditDentist();
         }
         [Test, Order(4)]
+        [AllureName("Should Delete Dentist")]
         public async Task Should_Delete_Dentist()
         {
             var dentist = new DentistsPage(page);
             await dentist.DeleteDentist();
         }
-        
+
 
     }
 }

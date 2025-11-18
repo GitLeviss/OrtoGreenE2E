@@ -1,4 +1,6 @@
-
+﻿
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
@@ -10,55 +12,63 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
-    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
+    [AllureOwner("Levi")]
     [Category("Criticality: Critical")]
-    [Category("Suite: Login")]
+    [AllureSuite("Patients")]
     [Category("Regression Tests")]
-    public class LoginTests : TestBase
+    [AllureNUnit]
+    public class PatientsTests : TestBase
     {
+
+
         private IPage page;
 
         [SetUp]
+        [AllureBefore]
         public async Task Setup()
         {
             page = await OpenBrowserAsync();
+            var login = new LoginPage(page);
+            await login.Login();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
         }
         [TearDown]
+        [AllureAfter]
         public async Task TearDown()
         {
             await CloseBrowserAsync();
         }
 
         [Test, Order(1)]
-        public async Task Should_Do_Login_With_Valid_Credentials()
+        [AllureName("Should Register a Patients")]
+        public async Task Should_Register_a_Patients()
         {
-            var login = new LoginPage(page);
-            await login.DoLogin();
+            var patients = new PatientsPage(page);
+            await patients.RegisterNewPatient();
         }
         [Test, Order(2)]
-        public async Task Should_Do_Logout()
+        [AllureName("Should Consult a Patients")]
+        public async Task Should_Consult_a_Patients()
         {
-            var login = new LoginPage(page);
-            await login.Logout();
+            var patients = new PatientsPage(page);
+            await patients.ConsultPatient();
         }
         [Test, Order(3)]
-        public async Task Shouldnt_Login_With_Incorrect_Email()
+        [AllureName("Should Edit a Patients")]
+        public async Task Should_Edit_a_Patients()
         {
-            var login = new LoginPage(page);
-            await login.LoginNegative("Invalid Email");
+            var patients = new PatientsPage(page);
+            await patients.EditPatient();
         }
         [Test, Order(4)]
-        public async Task Shouldnt_Login_With_Incorrect_Password()
+        [AllureName("Should Delete a Patients")]
+        public async Task Should_Delete_a_Patients()
         {
-            var login = new LoginPage(page);
-            await login.LoginNegative("Invalid Password");
+            var patients = new PatientsPage(page);
+            await patients.DeletePatient();
         }
-        [Test, Order(5)]
-        public async Task Shouldnt_Login_With_EmptyFields()
-        {
-            var login = new LoginPage(page);
-            await login.LoginNegative("Empty Fields");
-        }
+
     }
 }

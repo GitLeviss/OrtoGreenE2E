@@ -1,4 +1,6 @@
 ﻿
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
@@ -10,14 +12,16 @@ using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
-    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
+    [AllureOwner("Levi")]
     [Category("Criticality: Critical")]
-    [Category("Suite: Type Schedule")]
+    [AllureSuite("Speciality")]
     [Category("Regression Tests")]
+    [AllureNUnit]
     public class TypeScheduleTests : TestBase
     {
-        
+
 
         private IPage page;
 
