@@ -23,9 +23,6 @@ namespace OrtogreenE2E.tests
     public class SpecialityTests : TestBase
     {
 
-
-        private IPage page;
-
         [SetUp]
         [AllureBefore]
         public async Task Setup()

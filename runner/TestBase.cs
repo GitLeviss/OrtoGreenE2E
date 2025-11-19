@@ -70,24 +70,18 @@ namespace OrtogreenE2E.runner
 
             try
             {
-                if (page != null)
-                {
-                    await VideoUtils.ForceVideoFinalization(page);
-                }
+                await VideoUtils.ForceVideoFinalization(page);
 
                 if (context != null)
                 {
                     await context.CloseAsync();
                 }
 
-                if (page != null)
-                {
-                    await VideoHelper.AttachVideoAsync(page, status);
-                }
+                await VideoHelper.AttachVideoAsync(page, status);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao processar vídeo no teardown: {ex.Message}");
+                Console.WriteLine($"Erro ao processar vï¿½deo no teardown: {ex.Message}");
             }
             finally
             {

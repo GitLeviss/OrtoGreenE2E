@@ -3,11 +3,6 @@ using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
@@ -20,8 +15,6 @@ namespace OrtogreenE2E.tests
     [AllureNUnit]
     public class AvailabilityTests : TestBase
     {
-        private IPage page;
-
         [SetUp]
         [AllureBefore]
         public async Task Setup()

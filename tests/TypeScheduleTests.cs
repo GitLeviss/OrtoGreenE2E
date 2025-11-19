@@ -22,9 +22,6 @@ namespace OrtogreenE2E.tests
     public class TypeScheduleTests : TestBase
     {
 
-
-        private IPage page;
-
         [SetUp]
         public async Task Setup()
         {

@@ -22,8 +22,6 @@ namespace OrtogreenE2E.tests
     {
 
 
-        private IPage page;
-
         [SetUp]
         [AllureBefore]
         public async Task Setup()
