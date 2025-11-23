@@ -1,6 +1,8 @@
 ﻿using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,13 @@ namespace OrtoGreenE2E.pages
     {
         Utils utils;
         private readonly IPage page;
+        GeneralElements gen = new GeneralElements();
+        private readonly ArrivalsData data;
 
-        public ArrivalsPage(IPage page)
+        public ArrivalsPage(IPage page, ArrivalsData data = null )
         {
             this.page = page;
+            this.data = data ?? new ArrivalsData();
             utils = new Utils(page);
         }
 
@@ -25,34 +30,16 @@ namespace OrtoGreenE2E.pages
         [AllureStep("ScheduleAppointment")]
         public async Task ScheduleAppointment()
         {
-            try
-            {
-                //await page.PauseAsync();
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Chegadas" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Nova Consulta" }).ClickAsync();
-                await page.Locator(".n-base-selection-input").First.ClickAsync();
-                await page.GetByText(patientName).ClickAsync();
-                await page.Locator("form").GetByRole(AriaRole.Textbox).First.ClickAsync();
-                await page.GetByText("Dr. QA (CRO: 122435)").ClickAsync();
-                await page.Locator("form").GetByRole(AriaRole.Textbox).Nth(1).ClickAsync();
-                await page.GetByText("Canal (90 min)").ClickAsync();
-                await page.Locator("(//div[@class='flex items-center justify-between']//label[@class='n-radio'])[1]").ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Sala 1, Consultório A" }).FillAsync("Sala 8 Consultorio B");
-                await page.GetByTitle("Normal").Locator("div").ClickAsync();
-                await page.GetByText("Alta").ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações sobre a consulta" }).FillAsync("Apenas Testando");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Confirmar Agendamento" }).ClickAsync();
-                await Expect(page.GetByText("Consulta agendada com sucesso!")).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Create a new Appointment" + ex.Message);
-            }
-
-
-
-
+            await utils.Click(gen.LocatorSpanText("Nova Consulta"), "Click on New to create a new schedule");
+            await utils.Click(gen.SelectOrder("1"), "Click on first select to select a patient");
+            await utils.Click(data.PatientName, "Set patient on select patient",true);
+            await utils.Click(gen.SelectOrder("3"), "Click on select to expand dentist");
+            await utils.Click(data.DentistName, "Set dentist on select patient", true);
+            await utils.Click(gen.SelectOrder("4"), "Click on select to expand type of appointment");
+            await utils.Click(data.TypeOfConsult, "Set type of consult on select order", true);
+            await utils.Click(gen.RadioOrder("3"), "select disponibility time");
+            await utils.Click((" Salvar Agendamento"), "Click on sabe appointment", true);
+            await utils.ValidateTextIsVisibleOnScreen("Consulta agendada com sucesso!", "Validate if success message is visible on screen of user");
         }
         [AllureStep("Consult Existing Appointment")]
         public async Task ConsultExistingAppointment()
