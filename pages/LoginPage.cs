@@ -73,7 +73,7 @@ namespace OrtogreenE2E.pages
                 await Task.Delay(500);
                 await utils.Write(gen.LocatorPlaceholder("seu@email.com"), "qa@teste.com", "Write Email on email field on Login Page");
                 await utils.Write(gen.LocatorPlaceholder("Sua senha"), "Teste@123", "Write password on password field on Login Page");
-                await utils.Click(gen.LocatorSpanText("Entrar"), "Click on Submit button to do login");
+                await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on Submit button to do login");
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace OrtogreenE2E.pages
                 {
                     await utils.Write(gen.LocatorPlaceholder("seu@email.com"), "qa@teste.com", "Write Email on email field on Login Page");
                     await utils.Write(gen.LocatorPlaceholder("Sua senha"), "invalid", "Write password on password field on Login Page");
-                    await utils.Click(gen.LocatorSpanText("Entrar"), "Click on Submit button to do login");
+                    await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on Submit button to do login");
                     await Expect(page.GetByText("Email ou senha inválidos")).ToBeVisibleAsync();
 
                 }
@@ -98,7 +98,7 @@ namespace OrtogreenE2E.pages
                 {
                     await utils.Write(gen.LocatorPlaceholder("seu@email.com"), "qateste.com", "Write Email on email field on Login Page");
                     await utils.Write(gen.LocatorPlaceholder("Sua senha"), "Teste@123", "Write password on password field on Login Page");
-                    await utils.Click(gen.LocatorSpanText("Entrar"), "Click on Submit button to do login");
+                    await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on Submit button to do login");
                     await Expect(page.GetByText("Erro ao fazer login")).ToBeVisibleAsync();
                     await page.GetByText("Email inválido").ClickAsync();
 
