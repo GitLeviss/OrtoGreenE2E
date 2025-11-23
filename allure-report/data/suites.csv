@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","3494","Should Consult a Arrival","","2025-11-22","broken","2025-11-22","","Arrivals","ArrivalsTests","Should_Consult_Arrival"
+"","3578","Should Contain Started in Arrivals","","2025-11-22","broken","2025-11-22","","Arrivals","ArrivalsTests","Should_Contain_Started_In_Arrival"
+"","3787","Should Contain Canceled in Arrivals","","2025-11-22","broken","2025-11-22","","Arrivals","ArrivalsTests","Should_Contain_Canceled_In_Arrival"
+"","3576","Should Contain CheckIn in Arrivals","","2025-11-22","broken","2025-11-22","","Arrivals","ArrivalsTests","Should_Contain_CheckIn_in_Arrivals"
+"","5239","Should Register a New Arrival","","2025-11-22","passed","2025-11-22","","Arrivals","ArrivalsTests","Should_Register_a_New_Arrival"
+"","3483","Should Contain InProgress in Arrivals","","2025-11-22","broken","2025-11-22","","Arrivals","ArrivalsTests","Should_Contain_InProgress_In_Arrival"
