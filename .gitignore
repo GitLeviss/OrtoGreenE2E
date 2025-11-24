@@ -1,7 +1,3 @@
-node_modules/
-allure-results/
-bin/
-obj/
-.playwright/
-bin/
-.vs/
+*
+!allure-report/
+!allure-report/**
