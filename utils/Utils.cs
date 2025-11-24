@@ -32,20 +32,7 @@ namespace OrtogreenE2E.utils
                 throw new PlaywrightException("Don´t Possible Found the element: " + locator + " to write on step: " + step);
             }
         }
-        //[AllureStep("Click on step: {step}")]
-        //public async Task Click(string locator, string step)
-        //{
-        //    try
-        //    {
-        //        var elemento = page.Locator(locator);
-        //        await elemento.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
-        //        await elemento.ClickAsync();
-        //    }
-        //    catch
-        //    {
-        //        throw new PlaywrightException("Don´t Possible Found the element: " + locator + " to click on step: " + step);
-        //    }
-        //}
+        
         [AllureStep("Click on step: {step}")]
         public async Task Click(string locator, string step, bool getByText = false)
         {
