@@ -27,7 +27,7 @@ namespace OrtoGreenE2E.pages
         }
 
         string patientName = "User Teste";
-        [AllureStep("ScheduleAppointment")]
+
         public async Task ScheduleAppointment()
         {
             await utils.Click(gen.LocatorSpanText(" Nova Consulta "), "Click on New to create a new schedule");
@@ -41,7 +41,7 @@ namespace OrtoGreenE2E.pages
             await utils.Click(gen.LocatorSpanText(" Salvar Agendamento"), "Click on sabe appointment");
             await utils.ValidateTextIsVisibleOnScreen("Consulta agendada com sucesso!", "Validate if success message is visible on screen of user");
         }
-        [AllureStep("Consult Existing Appointment")]
+
         public async Task ConsultExistingAppointment()
         {
             try
@@ -55,7 +55,7 @@ namespace OrtoGreenE2E.pages
                 throw new PlaywrightException("Don´t possible Consult a Existing appointment" + ex.Message);
             }
         }
-        [AllureStep("Checkin")]
+
         public async Task Checkin()
         {
             try
@@ -78,7 +78,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
-        [AllureStep("Started")]
+
         public async Task Started()
         {
             try
@@ -96,7 +96,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
-        [AllureStep("In Progress")]
+
         public async Task InProgress()
         {
             try
@@ -113,7 +113,7 @@ namespace OrtoGreenE2E.pages
             }
 
         }
-        [AllureStep("Canceled")]
+
         public async Task Canceled()
         {
             try

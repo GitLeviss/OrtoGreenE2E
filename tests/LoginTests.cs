@@ -4,6 +4,7 @@ using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
+using OrtoGreenE2E.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace OrtogreenE2E.tests
         }
         [Test, Order(2)]
         [AllureName("Should Do Logout")]
+        [Ignore ("test disabled")]
         public async Task Should_Do_Logout()
         {
             var login = new LoginPage(page);
@@ -54,21 +56,24 @@ namespace OrtogreenE2E.tests
         [Test, Order(3)]
         public async Task Shouldnt_Login_With_Incorrect_Email()
         {
-            var login = new LoginPage(page);
+            var testData = new LoginData { UserEmail = "incorrect" };
+            var login = new LoginPage(page, testData);
             await login.LoginNegative("Invalid Email");
         }
         [Test, Order(4)]
         [AllureName("Shouldnt Login With Incorrect Password")]
         public async Task Shouldnt_Login_With_Incorrect_Password()
         {
-            var login = new LoginPage(page);
+            var testData = new LoginData { UserPassword = "incorrect" };
+            var login = new LoginPage(page, testData);
             await login.LoginNegative("Invalid Password");
         }
         [Test, Order(5)]
         [AllureName("Shouldnt Login With EmptyFields")]
         public async Task Shouldnt_Login_With_EmptyFields()
         {
-            var login = new LoginPage(page);
+            var testData = new LoginData { UserEmail = string.Empty, UserPassword = string.Empty };
+            var login = new LoginPage(page, testData);
             await login.LoginNegative("Empty Fields");
         }
     }

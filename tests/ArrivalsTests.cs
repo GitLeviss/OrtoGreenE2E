@@ -5,6 +5,7 @@ using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
 using OrtoGreenE2E.pages;
 using System;
@@ -47,7 +48,7 @@ namespace OrtogreenE2E.tests
         [Test, Order(1)]
         [AllureName("Should Register a New Arrival")]
         public async Task Should_Register_a_New_Arrival()
-        {
+        {   
             var arrivals = new ArrivalsPage(page);
             await arrivals.ScheduleAppointment();
         }
