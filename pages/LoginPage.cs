@@ -62,37 +62,29 @@ namespace OrtogreenE2E.pages
         }
         public async Task LoginNegative(string testCase)
         {
-
-            if (testCase == "Invalid Password")
+            switch (testCase)
             {
-                await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
-                await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
-                await Expect(page.GetByText("Email ou senha inválidos")).ToBeVisibleAsync();
-
+                case "Invalid Password":
+                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
+                    await Expect(page.GetByText("Email ou senha inválidos")).ToBeVisibleAsync();
+                    break;
+                case "Invalid Email":
+                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
+                    await Expect(page.GetByText("Erro ao fazer login")).ToBeVisibleAsync();
+                    break;
+                case "Empty Fields":
+                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
+                    await utils.ValidateTextIsVisibleOnScreen("Erro ao fazer login", "Validate if error message is visible on screen of user");
+                    await utils.ValidateTextIsVisibleOnScreen("Email é obrigatório", "Validate if message mandatory email is visible on screen of user");
+                    await utils.ValidateTextIsVisibleOnScreen("Senha é obrigatória", "Validate if message mandatory password is visible on screen of user");
+                    break;
             }
-            else if (testCase == "Invalid Email")
-            {
-                await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
-                await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
-                await Expect(page.GetByText("Erro ao fazer login")).ToBeVisibleAsync();
-
-            }
-            else if (testCase == "Empty Fields")
-            {
-                await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
-                await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
-                await utils.ValidateTextIsVisibleOnScreen("Erro ao fazer login", "Validate if error message is visible on screen of user");
-                await utils.ValidateTextIsVisibleOnScreen("Email é obrigatório", "Validate if message mandatory email is visible on screen of user");
-                await utils.ValidateTextIsVisibleOnScreen("Senha é obrigatório", "Validate if message mandatory password is visible on screen of user");
-
-            }
-
-
-
-
 
         }
 
