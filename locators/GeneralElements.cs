@@ -14,6 +14,8 @@ namespace OrtoGreenE2E.locators
         public string LocatorA (string text) => $"//a[text()='{text}']";
         public string SelectOrder (string position) => $"(//div[@class='n-select'])[{position}]";
         public string RadioOrder (string position) => $"(//div[@class='n-radio__dot'])[{position}]";
+        public string ButtonExpand(string position) => $"(//tr//i[@class='n-base-icon'])[{position}]";
+
 
     }
 }
