@@ -27,14 +27,23 @@ namespace OrtoGreenE2E.pages
         }
 
         string patientName = "User Teste";
-        string patientName = "User Teste";
-        Random random = new Random();
-        int randomNumber = random.Next(1, 999);
+
+        public static string UniqueNumber()
+        {
+            Random random = new Random();
+            int uniqueNumber = random.Next(0, 9999);
+            return uniqueNumber.ToString();
+        }        
+
+        public static string number = UniqueNumber();
+        public string Obs { get; } = "Test " + number;
+
 
 
 
         public async Task ScheduleAppointment()
         {
+
             await utils.Click(gen.LocatorSpanText(" Nova Consulta "), "Click on New to create a new schedule");
             await utils.Click(gen.SelectOrder("1"), "Click on first select to select a patient");
             await utils.Click(data.PatientName, "Set patient on select patient", true);
@@ -43,7 +52,7 @@ namespace OrtoGreenE2E.pages
             await utils.Click(gen.SelectOrder("4"), "Click on select to expand type of appointment");
             await utils.Click(data.TypeOfConsult, "Set type of consult on select order", true);
             await utils.Click(gen.RadioOrder("3"), "select disponibility time");
-            await utils.Write(gen.LocatorPlaceholder("Observações sobre a consulta..."), "", "");
+            await utils.Write(gen.LocatorPlaceholder("Observações sobre a consulta..."), Obs, "Insert observation");
             await utils.Click(gen.LocatorSpanText(" Salvar Agendamento"), "Click on sabe appointment");
             await utils.ValidateTextIsVisibleOnScreen("Consulta agendada com sucesso!", "Validate if success message is visible on screen of user");
         }
@@ -54,7 +63,7 @@ namespace OrtoGreenE2E.pages
             {
                 await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "insert patient name on search bar");
                 await utils.Click(gen.ButtonExpand("1"), "Click on button to expand data of appointment");
-                await Expect(page.Locator("(//span[text()='User Teste'])[1]")).ToBeVisibleAsync();
+                await utils.ValidateTextIsVisibleOnScreen(Obs, "Validate if obs messa is visible on table"); 
             }
             catch (Exception ex)
             {
