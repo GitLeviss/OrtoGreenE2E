@@ -87,6 +87,5 @@ namespace OrtogreenE2E.tests
             var arrivals = new ArrivalsPage(page);
             await arrivals.Canceled();
         }
-
     }
 }
