@@ -1,78 +1,52 @@
-﻿name: Deploy Allure Report to GitHub Pages
+﻿name: Allure Report
+
+permissions:
+  contents: write
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: read   # GITHUB_TOKEN só leitura, pois a org limita
+    branches: ["main"]
 
 jobs:
-  test-and-deploy:
+  report:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
-        
-    - name: Cache NuGet packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-          
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Build tests project
-      run: dotnet build --configuration Debug
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Install Playwright browsers
-      run: pwsh ./bin/Debug/net8.0/playwright.ps1 install --with-deps
-      
-    - name: Clean previous Allure results
-      run: rm -rf allure-results || true
-      
-    - name: Run tests
-      continue-on-error: true
-      run: |
-        if [ -d "allure-results" ]; then
-          rm -rf allure-results
-        fi
-        dotnet test --configuration Debug --logger "console;verbosity=detailed"
-        
-    - name: Setup Node.js for Allure
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Install Allure Commandline
-      run: npm install -g allure-commandline
-      
-    - name: Generate Allure Report
-      run: |
-        if [ -d "bin/Debug/net8.0/allure-results" ]; then
-          allure generate bin/Debug/net8.0/allure-results --clean -o allure-report
-        else
-          echo "No allure-results directory found"
-          exit 1
-        fi
+      - name: Install Allure commandline
+        uses: simple-elf/allure-commandline-action@v1.2
+        with:
+          version: 2.29.0
 
-        
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/main'
-      with:
-        personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}  # ← PAT do usuário
-        publish_dir: ./allure-report
-        keep_files: false
+      - name: Restore
+        run: dotnet restore
+
+      - name: Test
+        run: |
+          if [ -d "./bin/Debug/net8.0/allure-results" ]; then rm -rf ./bin/Debug/net8.0/allure-results; fi
+          dotnet test
+
+      - name: Generate Allure Report
+        run: |
+          allure generate ./bin/Debug/net8.0/allure-results --clean -o ./allure-report
+
+      - name: Publish to gh-pages
+        run: |
+          git fetch
+          git checkout gh-pages || git checkout --orphan gh-pages
+          rm -rf ./*
+          cp -r ./allure-report/* .
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
+          git commit -m "Update Allure Report" || echo "No changes to commit"
+          git push --force origin gh-pages
