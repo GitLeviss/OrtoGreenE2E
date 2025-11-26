@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read   # GITHUB_TOKEN só leitura, pois a org limita
+  contents: read
 
 jobs:
   test-and-deploy:
@@ -39,6 +39,11 @@ jobs:
 
     - name: Install Playwright browsers
       run: pwsh ./bin/Debug/net8.0/playwright.ps1 install --with-deps
+
+    # 🔥 AQUI ESTÁ O AJUSTE PARA O ACTIONS ACEITAR O CAMINHO
+    - name: Override Allure config for CI
+      run: |
+        echo '{ "allure": { "directory": "allure-results" } }' > allureConfig.json
       
     - name: Clean previous Allure results
       run: rm -rf allure-results || true
@@ -72,7 +77,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/main'
       with:
-        personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}  # ← PAT do usuário
+        personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
         publish_dir: ./allure-report
         keep_files: false
         force_orphan: true
