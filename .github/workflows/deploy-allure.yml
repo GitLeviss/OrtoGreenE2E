@@ -73,7 +73,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/main'
       with:
-        personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}  # ← PAT do usuário
+        personal_token: ${{ secrets.GITHUB_TOKEN  }}  # ← PAT do usuário
         publish_dir: ./allure-report
         keep_files: false
         force_orphan: true
