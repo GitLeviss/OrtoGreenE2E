@@ -46,5 +46,9 @@
 		<Using Include="System.Threading.Tasks" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Include=".github\workflows\deploy-allure.yml" />
+	</ItemGroup>
+
 
 </Project>

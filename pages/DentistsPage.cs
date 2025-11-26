@@ -1,11 +1,14 @@
-﻿using Microsoft.Playwright;
-using static Microsoft.Playwright.Assertions;
+using Allure.NUnit.Attributes;
+using Microsoft.Playwright;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Playwright.Assertions;
 
 namespace OrtogreenE2E.pages
 {
@@ -13,93 +16,91 @@ namespace OrtogreenE2E.pages
     {
         Utils utils;
         private readonly IPage page;
+        GeneralElements gen = new GeneralElements();
+        private readonly DentistsData data;
 
-        public DentistsPage(IPage page)
+        public DentistsPage(IPage page, DentistsData data = null)
         {
             this.page = page;
+            this.data = data ?? new DentistsData();
             utils = new Utils(page);
         }
 
-        string dentistName = "Test Dentist";
+public static string UniqueNumber()
+        {
+            Random random = new Random();
+            int uniqueNumber = random.Next(0, 9999);
+            return uniqueNumber.ToString();
+        }        
+
+        public static string number = UniqueNumber();
+        public string Email { get; } = $"teste{number}@email.com";
 
         public async Task RegisterDentist()
         {
             try
             {
-                Random random = new Random();
-                int randomNumber = random.Next();
-
-
-                await page.GetByRole(AriaRole.Button, new() { Name = "Novo Dentista" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Dr(a). Nome Completo" }).FillAsync(dentistName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "-00" }).FillAsync("38188785873");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9531-89062");
-                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *Selecione a unidadeCRO *123456UF do CRO *" }).GetByRole(AriaRole.Textbox).First.ClickAsync();
-                await page.GetByText("QualityAssurance").Nth(1).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "123456" }).FillAsync("321456");
-                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *QualityAssuranceCRO *UF do CRO *StatusAtivo" }).GetByRole(AriaRole.Textbox).Nth(2).ClickAsync();
-                await page.Locator("form div").Filter(new() { HasText = "Informações ProfissionaisUnidade *QualityAssuranceCRO *UF do CRO *StatusAtivo" }).GetByRole(AriaRole.Textbox).Nth(2).FillAsync("São Paulo");
-                await page.GetByText("São Paulo (SP)").ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync($"teste{randomNumber}@email.com");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Mínimo 8 caracteres" }).FillAsync("Teste@123");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Mínimo 8 caracteres" }).PressAsync("Tab");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Digite a senha novamente" }).FillAsync("Teste@123");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).FillAsync("Teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Criar Dentista" }).ClickAsync();
-                await Expect(page.GetByText("Dentista criado com sucesso!")).ToBeVisibleAsync();
-
-                
-
+                await utils.Click(gen.LocatorSpanText("Novo Dentista"), "Click on New Dentist button");
+                await utils.Write(gen.LocatorPlaceholder("Dr(a). Nome Completo"), data.DentistName, "Insert dentist name");
+                await utils.Write(gen.LocatorPlaceholder("-00"), data.CPF, "Insert CPF");
+                await utils.Click(gen.LocatorPlaceholder("(11) 99999-"), "Click on phone field");
+                await utils.Write(gen.LocatorPlaceholder("(11) 99999-"), data.Phone, "Insert phone");
+                await utils.Click(gen.SelectOrder("1"), "Click on unit selector");
+                await utils.Click(data.Unit, "Select unit", true);
+                await utils.Write(gen.LocatorPlaceholder("123456"), data.CRO, "Insert CRO");
+                await utils.Click(gen.SelectOrder("2"), "Click on CRO state selector");
+                await utils.Click(data.CROState, "Select CRO state", true);
+                await utils.Write(gen.LocatorPlaceholder("email@exemplo.com"), Email, "Insert email");
+                await utils.Write(gen.LocatorPlaceholder("Mínimo 8 caracteres"), data.Password, "Insert password");
+                await utils.Write(gen.LocatorPlaceholder("Digite a senha novamente"), data.Password, "Confirm password");
+                await utils.Write(gen.LocatorPlaceholder("Informações adicionais sobre"), data.Observation, "Insert observation");
+                await utils.Click(gen.LocatorSpanText("Criar Dentista"), "Click on create dentist button");
+                await utils.ValidateTextIsVisibleOnScreen("Dentista criado com sucesso!", "Validate if success message is visible on screen");
             }
             catch (Exception ex)
             {
                 throw new PlaywrightException("Don´t possible register a new dentist" + ex.Message);
             }
-
         }
 
-        public async Task ConsultDentist()
+public async Task ConsultDentist()
         {
             try
             {
-
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(dentistName);
-                await Expect(page.Locator("(//td//span//span//div)[1]")).ToHaveTextAsync(dentistName);
-                await Expect(page.Locator("(//td)[6]//div//sup//span[1]")).ToHaveTextAsync("Ativo");
+                await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.DentistName, "Insert dentist name on search field");
+                await utils.ValidateTextIsVisibleOnScreen(data.DentistName, "Validate if dentist name is visible on table");
+                await utils.ValidateTextIsVisibleOnScreen("Ativo", "Validate if dentist status is active");
             }
             catch (Exception ex)
             {
                 throw new PlaywrightException("Don´t possible consult dentist" + ex.Message);
             }
         }
-        public async Task EditDentist()
+public async Task EditDentist()
         {
             try
             {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).First.ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Dr(a). Nome Completo" }).FillAsync(dentistName + " edited");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Dentista atualizado com")).ToBeVisibleAsync();
-
+                await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+                await utils.Write(gen.LocatorPlaceholder("Dr(a). Nome Completo"), data.DentistName + " edited", "Edit dentist name");
+                await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+                await utils.ValidateTextIsVisibleOnScreen("Dentista atualizado com", "Validate if success message is visible on screen");
             }
             catch (Exception ex)
             {
                 throw new PlaywrightException("Don´t possible Edit dentist" + ex.Message);
             }
         }
-        public async Task DeleteDentist()
+public async Task DeleteDentist()
         {
             try
             {
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(dentistName + " edited");
-                await page.Locator("//tr[.//div[contains(@class,'font-medium') and normalize-space(text())='Test Dentist edited']]//button[.//span[normalize-space(text())='Excluir']]").ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Dentista excluído com sucesso")).ToBeVisibleAsync();
-                await Expect(page.GetByText("Dentista deletado com sucesso!")).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(dentistName + " edited");
-                await Expect(page.GetByText("Não há dados")).ToBeVisibleAsync();
-
+                await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.DentistName + " edited", "Search for edited dentist");
+                await utils.Click($"//tr[.//div[contains(@class,'font-medium') and normalize-space(text())='{data.DentistName} edited']]//button[.//span[normalize-space(text())='Excluir']]", "Click on delete button");
+                await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+                await utils.ValidateTextIsVisibleOnScreen("Dentista excluído com sucesso", "Validate if deletion message is visible");
+                await utils.ValidateTextIsVisibleOnScreen("Dentista deletado com sucesso!", "Validate if deletion confirmation is visible");
+                await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.DentistName + " edited", "Search for deleted dentist");
+                await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if dentist was deleted");
             }
             catch (Exception ex)
             {

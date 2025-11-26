@@ -1,9 +1,12 @@
-﻿
+
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
+using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using OrtoGreenE2E.pages;
 using System;
 using System.Collections.Generic;
@@ -22,17 +25,18 @@ namespace OrtogreenE2E.tests
     [AllureNUnit]
     public class SpecialityTests : TestBase
     {
-
+        Utils utils;
+        GeneralElements gen = new GeneralElements();
         [SetUp]
         [AllureBefore]
         public async Task Setup()
         {
             page = await OpenBrowserAsync();
+            utils = new Utils(page);
             var login = new LoginPage(page);
             await login.Login();
-            await page.GetByText("Clínica", new() { Exact = true }).ClickAsync();
-            await page.GetByRole(AriaRole.Link, new() { Name = "Especialidades" }).ClickAsync();
-
+            await utils.Click(gen.LocatorDiv("Clínica"), "Click on Clinic on main menu");
+            await utils.Click(gen.LocatorA("Especialidades"), "Click on Specialities on main menu");
         }
         [TearDown]
         [AllureAfter]

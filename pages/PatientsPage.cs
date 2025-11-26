@@ -1,76 +1,64 @@
-﻿//patientspage
-
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
-using static Microsoft.Playwright.Assertions;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OrtoGreenE2E.locators;
+using static Microsoft.Playwright.Assertions;
 
 namespace OrtogreenE2E.pages
 {
     public class PatientsPage
     {
+        Utils utils;
         private readonly IPage page;
-        Utils util;
         GeneralElements gen = new GeneralElements();
+        private readonly PatientsData data;
 
-        public PatientsPage(IPage page)
+        public PatientsPage(IPage page, PatientsData data = null)
         {
             this.page = page;
-            util = new Utils(page);
+            this.data = data ?? new PatientsData();
+            utils = new Utils(page);
         }
-
-        string patientName = "Paciente Testes";
 
         public async Task RegisterNewPatient()
         {
-
             try
             {
-
-                await page.GetByRole(AriaRole.Button, new() { Name = "Novo Paciente" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "email@exemplo.com" }).FillAsync("emailteste@email.com");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "(11) 99999-" }).FillAsync("(11) 9341-25767");
-                await util.Write(gen.LocatorPlaceholder("Selecione a data"), "29/01/2003", "Write Bday on input");
-                //await page.PauseAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "-000" }).FillAsync("06240090");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome da rua" }).FillAsync("Rua pariquera açu");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Número" }).FillAsync("127");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Apto, Bloco, etc" }).FillAsync("casa");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Bairro" }).FillAsync("Munhoz Junior");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Cidade" }).FillAsync("Osasco");
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Estado$") }).GetByRole(AriaRole.Textbox).ClickAsync();
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Estado$") }).GetByRole(AriaRole.Textbox).FillAsync("SP");
-                await page.GetByText("São Paulo (SP)").ClickAsync();
-
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Informações adicionais sobre" }).FillAsync("apenas testando");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Criar Paciente" }).ClickAsync();
-                await Expect(page.GetByText("Paciente criado com sucesso!")).ToBeVisibleAsync();
-
+                await utils.Click(gen.LocatorSpanText("Novo Paciente"), "Click on New Patient button");
+                await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName, "Insert patient name");
+                await utils.Write(gen.LocatorPlaceholder("email@exemplo.com"), data.Email, "Insert patient email");
+                await utils.Write(gen.LocatorPlaceholder("(11) 99999-"), data.Phone, "Insert patient phone");
+                await utils.Write(gen.LocatorPlaceholder("Selecione a data"), data.BirthDate, "Insert birth date");
+                await utils.Write(gen.LocatorPlaceholder("-000"), data.CEP, "Insert CEP");
+                await utils.Write(gen.LocatorPlaceholder("Nome da rua"), data.Street, "Insert street name");
+                await utils.Write(gen.LocatorPlaceholder("Número"), data.Number, "Insert number");
+                await utils.Write(gen.LocatorPlaceholder("Apto, Bloco, etc"), data.Complement, "Insert complement");
+                await utils.Write(gen.LocatorPlaceholder("Bairro"), data.Neighborhood, "Insert neighborhood");
+                await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");
+                await utils.Click(gen.SelectOrder("1"), "Click on state selector");
+                await utils.Click("São Paulo (SP)", "Select São Paulo state", true);
+                await utils.Write(gen.LocatorPlaceholder("Informações adicionais sobre"), data.Observation, "Insert observation");
+                await utils.Click(gen.LocatorSpanText("Criar Paciente"), "Click on create patient button");
+                await utils.ValidateTextIsVisibleOnScreen("Paciente criado com sucesso!", "Validate if success message is visible on screen");
             }
             catch (Exception ex)
             {
                 throw new PlaywrightException("Don´t possible Register a new Patient" + ex.Message);
             }
-
-
-
-
-
         }
 
         public async Task ConsultPatient()
         {
             try
             {
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName);
-                await Expect(page.GetByText("Paciente Testes").First).ToBeVisibleAsync();
-
+                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Insert patient name on search field");
+                await utils.ValidateTextIsVisibleOnScreen(data.PatientName, "Validate if patient name is visible on table");
             }
             catch (Exception ex)
             {
@@ -81,14 +69,12 @@ namespace OrtogreenE2E.pages
         {
             try
             {
-                //await page.PauseAsync();
-
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName);
-                await page.Locator("//div[text()='Paciente Testes']/ancestor::tr//span[text()='Editar']").ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome completo do paciente" }).FillAsync(patientName + " Editado");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Paciente atualizado com")).ToBeVisibleAsync();
+                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Search for patient");
+                await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Editar']", "Click on edit button");
+                await utils.Click(gen.LocatorPlaceholder("Nome completo do paciente"), "Click on patient name field");
+                await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName + " Editado", "Edit patient name");
+                await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+                await utils.ValidateTextIsVisibleOnScreen("Paciente atualizado com", "Validate if success message is visible on screen");
             }
             catch (Exception ex)
             {
@@ -99,21 +85,28 @@ namespace OrtogreenE2E.pages
         {
             try
             {
-
-                await page.GetByRole(AriaRole.Link, new() { Name = "Pacientes" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Nome, código, CPF, email ou" }).FillAsync(patientName + " Editado");
-                await page.Locator("//div[text()='Paciente Testes']/ancestor::tr//span[text()='Excluir']").ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await page.GetByText("Paciente deletado com sucesso!").ClickAsync();
-                await page.GetByText("Paciente excluído com sucesso").ClickAsync();
+                await utils.Click(gen.LocatorA("Pacientes"), "Click on Patients menu");
+                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName + " Editado", "Search for edited patient");
+                await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Excluir']", "Click on delete button");
+                await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+                await utils.ValidateTextIsVisibleOnScreen("Paciente deletado com sucesso!", "Validate if deletion message is visible");
+                await utils.ValidateTextIsVisibleOnScreen("Paciente excluído com sucesso", "Validate if deletion confirmation is visible");
             }
             catch (Exception ex)
             {
                 throw new PlaywrightException("Don´t possible delete Patient" + ex.Message);
             }
-
         }
 
-
     }
+
+
+
+
+
 }
+
+
+
+
+
