@@ -27,33 +27,23 @@ namespace OrtogreenE2E.pages
         }
 
 
-public async Task CreateNewAvailability()
+        public async Task CreateNewAvailability()
         {
-            try
-            {
-                await utils.Click(".n-base-selection-label", "Click on dentist selector");
-                await utils.Click(data.DentistName, "Select dentist", true);
-                await utils.Click(gen.LocatorSpanText("Nova Regra"), "Click on New Rule button");
-                await utils.Click(gen.LocatorDiv(data.Period), "Select period");
-                await utils.Click(gen.LocatorPlaceholder("Observações adicionais sobre"), "Click on observation field");
-                await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
-                await utils.Click(gen.LocatorSpanText("Salvar"), "Click on save button");
-                await utils.ValidateTextIsVisibleOnScreen("Regra de agenda criada com", "Validate if success message is visible on screen");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible register a new rule" + ex.Message);
-            }
 
-            try
-            {
-                await utils.Click($"//span[text()='{data.Observation}']/ancestor::tr//span[text()='Remover']", "Click on remove button");
-                await utils.ValidateTextIsVisibleOnScreen("Regra de agenda removida com", "Validate if removal message is visible on screen");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Remove a rule" + ex.Message);
-            }
+            await utils.Click(".n-base-selection-label", "Click on dentist selector");
+            await utils.Click(data.DentistName, "Select dentist", true);
+            await utils.Click(gen.LocatorSpanText("Nova Regra"), "Click on New Rule button");
+            await utils.Click(gen.LocatorDiv(data.Period), "Select period");
+            await utils.Click(gen.LocatorPlaceholder("Observações adicionais sobre"), "Click on observation field");
+            await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Salvar"), "Click on save button");
+            await utils.ValidateTextIsVisibleOnScreen("Regra de agenda criada com", "Validate if success message is visible on screen");
+
+
+
+            await utils.Click($"//span[text()='{data.Observation}']/ancestor::tr//span[text()='Remover']", "Click on remove button");
+            await utils.ValidateTextIsVisibleOnScreen("Regra de agenda removida com", "Validate if removal message is visible on screen");
+
 
             //try
             //{
@@ -78,9 +68,9 @@ public async Task CreateNewAvailability()
             //{
             //    throw new PlaywrightException("Don´t possible remove a block");
             //}
-            
-          
-         
+
+
+
         }
 
     }

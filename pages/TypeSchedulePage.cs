@@ -1,105 +1,76 @@
-﻿using Microsoft.Playwright;
-using static Microsoft.Playwright.Assertions;
+using Allure.NUnit.Attributes;
+using Microsoft.Playwright;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Playwright.Assertions;
 
 namespace OrtogreenE2E.pages
 {
     public class TypeSchedulePage
     {
+        Utils utils;
         private readonly IPage page;
+        GeneralElements gen = new GeneralElements();
+        private readonly TypeScheduleData data;
 
-        public TypeSchedulePage(IPage page) 
+        public TypeSchedulePage(IPage page, TypeScheduleData data = null)
         {
-            this.page = page;            
+            this.page = page;
+            this.data = data ?? new TypeScheduleData();
+            utils = new Utils(page);
         }
 
-        public string typeName = "Agendamento Teste";
         public async Task RegisterNewTypeShedule()
         {
-            //await page.PauseAsync();
 
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Tipos de Agendamento" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Novo Tipo" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Consulta Inicial, Limpeza" }).FillAsync(typeName);
-                
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: CONS-INICIAL" }).FillAsync("test");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar" }).ClickAsync();
-                await Expect(page.GetByText("Tipo de agendamento criado com sucesso", new() { Exact = true })).ToBeVisibleAsync();
-                await Expect(page.GetByText("Tipo de agendamento criado com sucesso!")).ToBeVisibleAsync();
-
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible create a new schedule type" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Novo Tipo"), "Click on New Type button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Consulta Inicial, Limpeza"), data.TypeName, "Insert type name");
+            await utils.Write(gen.LocatorPlaceholder("Ex: CONS-INICIAL"), data.Code, "Insert type code");
+            await utils.Click(gen.LocatorSpanText("Salvar"), "Click on save button");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento criado com sucesso", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento criado com sucesso!", "Validate if success confirmation is visible on screen");
 
         }
 
         public async Task ConsultTypeSchedule()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Tipos de Agendamento" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(typeName);
-                await Expect(page.GetByText(typeName)).ToBeVisibleAsync();
-                await Expect(page.GetByTitle("Ativo")).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-               throw new  PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
-            }
-            
+            await utils.Click(gen.LocatorPlaceholder("Buscar..."), "Click on search field");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.TypeName, "Insert type name on search field");
+            await utils.ValidateTextIsVisibleOnScreen(data.TypeName, "Validate if type name is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativo", "Validate if type status is active");
+
         }
 
         public async Task EditTypeSchedule()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Tipos de Agendamento" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(typeName);
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Consulta Inicial, Limpeza" }).FillAsync("Agendamento Teste Editado");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar" }).ClickAsync();
-                await Expect(page.GetByText("Tipo de agendamento atualizado com sucesso", new() { Exact = true })).ToBeVisibleAsync();
-                await Expect(page.GetByText("Tipo de agendamento atualizado com sucesso!")).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
-            }
+
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.TypeName, "Search for type");
+            await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Consulta Inicial, Limpeza"), data.TypeName + " Editado", "Edit type name");
+            await utils.Click(gen.LocatorSpanText("Salvar"), "Click on save button");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento atualizado com sucesso", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento atualizado com sucesso!", "Validate if success confirmation is visible on screen");
+
         }
+
         public async Task DeleteTypeSchedule()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Tipos de Agendamento" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(typeName + " Editado");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Tipo de agendamento deletado")).ToBeVisibleAsync();
-                await Expect(page.GetByText("Tipo de agendamento excluído")).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync("Agendamento Teste Editado");
-                await Expect(page.GetByText("Não há dados")).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible consult a type schedule" + ex.Message);
-            }
+
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.TypeName + " Editado", "Search for edited type");
+            await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento deletado", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Tipo de agendamento excluído", "Validate if deletion confirmation is visible");
+            await utils.Click(gen.LocatorPlaceholder("Buscar..."), "Click on search field");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.TypeName + " Editado", "Search for deleted type");
+            await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if type was deleted");
+
         }
-
-
     }
 }

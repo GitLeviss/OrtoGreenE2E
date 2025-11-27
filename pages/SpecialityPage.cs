@@ -1,315 +1,218 @@
-﻿using Microsoft.Playwright;
-using static Microsoft.Playwright.Assertions;
+using Allure.NUnit.Attributes;
+using Microsoft.Playwright;
 using OrtogreenE2E.utils;
+using OrtoGreenE2E.data;
+using OrtoGreenE2E.locators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Playwright.Assertions;
 
-namespace OrtoGreenE2E.pages
+namespace OrtogreenE2E.pages
 {
     public class SpecialityPage
     {
         Utils utils;
         private readonly IPage page;
+        GeneralElements gen = new GeneralElements();
+        private readonly SpecialityData data;
 
-        public SpecialityPage(IPage page)
+        public SpecialityPage(IPage page, SpecialityData data = null)
         {
             this.page = page;
+            this.data = data ?? new SpecialityData();
             utils = new Utils(page);
         }
-        string specialistyOrtoName = "Ortodontia";
-        string specialistyGeneralClinicName = "Clínico Geral";
-        string specialistyEndoName = "Endodontia";
-        string specialistyImplaName = "Implantodontia";
 
         public async Task RegisterSpecialityOrto()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Nova Especialidade" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyOrtoName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Breve descrição sobre a" }).FillAsync("teste cadastro especialidade ortodontia");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais sobre" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityOrto" + ex.Message);
-            }
 
-
-
+            await utils.Click(gen.LocatorSpanText("Nova Especialidade"), "Click on New Speciality button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.OrtoName, "Insert orthodontics speciality name");
+            await utils.Write(gen.LocatorPlaceholder("Breve descrição sobre a"), data.Description + " ortodontia", "Insert description");
+            await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Salvar Especialidade"), "Click on save speciality button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade criada com", "Validate if success message is visible on screen");
 
         }
 
         public async Task ConsultSpecialityOrto()
         {
-            try
-            {
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyOrtoName);
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
-}
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityOrto" + ex.Message);
-            }
+
+            await utils.ValidateTextIsVisibleOnScreen(data.OrtoName, "Validate if orthodontics speciality is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is active");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas1", "Validate if active count is 1");
+            await utils.Click("div:has-text('Total de Especialidades1')", "Click on total specialities count");
+
         }
-       
-        
+
         public async Task EditSpecialityOrto()
         {
-            try
-            {
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyOrtoName + " teste Edição");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade atualizada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyOrtoName + " teste Edição");
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Edit SpecialityOrto" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.OrtoName + " teste Edição", "Edit speciality name");
+            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade atualizada com", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen(data.OrtoName + " teste Edição", "Validate if edited name is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is still active");
+
         }
+
         public async Task DeleteSpecialityOrto()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade deletada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades0$") }).Nth(1)).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas0$") }).Nth(1)).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyOrtoName + " teste Edição");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Delete SpecialityOrto" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade deletada com", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Total de Especialidades0", "Validate if total count is 0");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas0", "Validate if active count is 0");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.OrtoName + " teste Edição", "Search for deleted speciality");
+            await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if speciality was deleted");
+
         }
+
         public async Task RegisterSpecialityGen()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Nova Especialidade" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyGeneralClinicName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Breve descrição sobre a" }).FillAsync("teste cadastro especialidade ortodontia");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais sobre" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityGen" + ex.Message);
-            }
 
-
-
+            await utils.Click(gen.LocatorSpanText("Nova Especialidade"), "Click on New Speciality button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.GeneralClinicName, "Insert general clinic speciality name");
+            await utils.Write(gen.LocatorPlaceholder("Breve descrição sobre a"), data.Description + " clínico geral", "Insert description");
+            await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Salvar Especialidade"), "Click on save speciality button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade criada com", "Validate if success message is visible on screen");
 
         }
 
         public async Task ConsultSpecialityGen()
         {
-            try
-            {
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyGeneralClinicName);
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
-}
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityGen" + ex.Message);
-            }
+
+            await utils.ValidateTextIsVisibleOnScreen(data.GeneralClinicName, "Validate if general clinic speciality is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is active");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas1", "Validate if active count is 1");
+            await utils.Click("div:has-text('Total de Especialidades1')", "Click on total specialities count");
+
         }
-       
-        
+
         public async Task EditSpecialityGen()
         {
-            try
-            {
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyGeneralClinicName + " teste Edição");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade atualizada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyGeneralClinicName + " teste Edição");
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Edit SpecialityGen" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.GeneralClinicName + " teste Edição", "Edit speciality name");
+            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade atualizada com", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen(data.GeneralClinicName + " teste Edição", "Validate if edited name is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is still active");
+
         }
+
         public async Task DeleteSpecialityGen()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade deletada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades0$") }).Nth(1)).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas0$") }).Nth(1)).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyGeneralClinicName + " teste Edição");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Delete SpecialityGen" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade deletada com", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Total de Especialidades0", "Validate if total count is 0");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas0", "Validate if active count is 0");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.GeneralClinicName + " teste Edição", "Search for deleted speciality");
+            await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if speciality was deleted");
+
         }
+
         public async Task RegisterSpecialityEndo()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Nova Especialidade" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyEndoName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Breve descrição sobre a" }).FillAsync("teste cadastro especialidade ortodontia");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais sobre" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityEndo" + ex.Message);
-            }
 
-
+            await utils.Click(gen.LocatorSpanText("Nova Especialidade"), "Click on New Speciality button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.EndoName, "Insert endodontics speciality name");
+            await utils.Write(gen.LocatorPlaceholder("Breve descrição sobre a"), data.Description + " endodontia", "Insert description");
+            await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Salvar Especialidade"), "Click on save speciality button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade criada com", "Validate if success message is visible on screen");
 
 
         }
 
         public async Task ConsultSpecialityEndo()
         {
-            try
-            {
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyEndoName);
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
-}
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityEndo" + ex.Message);
-            }
+
+            await utils.ValidateTextIsVisibleOnScreen(data.EndoName, "Validate if endodontics speciality is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is active");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas1", "Validate if active count is 1");
+            await utils.Click("div:has-text('Total de Especialidades1')", "Click on total specialities count");
+
         }
-       
-        
+
         public async Task EditSpecialityEndo()
         {
-            try
-            {
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyEndoName + " teste Edição");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade atualizada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyEndoName + " teste Edição");
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Edit SpecialityEndo" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.EndoName + " teste Edição", "Edit speciality name");
+            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade atualizada com", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen(data.EndoName + " teste Edição", "Validate if edited name is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is still active");
+
         }
+
         public async Task DeleteSpecialityEndo()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade deletada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades0$") }).Nth(1)).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas0$") }).Nth(1)).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyEndoName + " teste Edição");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Delete SpecialityEndo" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade deletada com", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Total de Especialidades0", "Validate if total count is 0");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas0", "Validate if active count is 0");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.EndoName + " teste Edição", "Search for deleted speciality");
+            await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if speciality was deleted");
+
         }
 
-    
         public async Task RegisterSpecialityImpla()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Nova Especialidade" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyImplaName);
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Breve descrição sobre a" }).FillAsync("teste cadastro especialidade ortodontia");
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Observações adicionais sobre" }).FillAsync("teste");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Especialidade" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade criada com")).ToBeVisibleAsync(); 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Create a new SpecialityImpla" + ex.Message);
-            }
 
-
-
+            await utils.Click(gen.LocatorSpanText("Nova Especialidade"), "Click on New Speciality button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.ImplaName, "Insert implantodontics speciality name");
+            await utils.Write(gen.LocatorPlaceholder("Breve descrição sobre a"), data.Description + " implantodontia", "Insert description");
+            await utils.Write(gen.LocatorPlaceholder("Observações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Salvar Especialidade"), "Click on save speciality button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade criada com", "Validate if success message is visible on screen");
 
         }
 
         public async Task ConsultSpecialityImpla()
         {
-            try
-            {
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyImplaName);
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas1$") }).Nth(1)).ToBeVisibleAsync();
-                await page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades1$") }).Nth(1).ClickAsync();
-}
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Existing SpecialityImpla" + ex.Message);
-            }
+
+            await utils.ValidateTextIsVisibleOnScreen(data.ImplaName, "Validate if implantodontics speciality is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is active");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas1", "Validate if active count is 1");
+            await utils.Click("div:has-text('Total de Especialidades1')", "Click on total specialities count");
+
         }
-       
-        
+
         public async Task EditSpecialityImpla()
         {
-            try
-            {
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "Editar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Ex: Ortodontia," }).FillAsync(specialistyImplaName + " teste Edição");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Alterações" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade atualizada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("(//td)[1]//span//span//div")).ToHaveTextAsync(specialistyImplaName + " teste Edição");
-                await Expect(page.Locator("(//td)[4]//div//sup//span")).ToHaveTextAsync("Ativa");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Edit SpecialityImpla" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia,"), data.ImplaName + " teste Edição", "Edit speciality name");
+            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade atualizada com", "Validate if success message is visible on screen");
+            await utils.ValidateTextIsVisibleOnScreen(data.ImplaName + " teste Edição", "Validate if edited name is visible on table");
+            await utils.ValidateTextIsVisibleOnScreen("Ativa", "Validate if speciality status is still active");
+
         }
+
         public async Task DeleteSpecialityImpla()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Excluir" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, excluir" }).ClickAsync();
-                await Expect(page.GetByText("Especialidade deletada com")).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Total de Especialidades0$") }).Nth(1)).ToBeVisibleAsync();
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Ativas0$") }).Nth(1)).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar..." }).FillAsync(specialistyImplaName + " teste Edição");
-                await Expect(page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Não há dados$") }).Nth(1)).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Delete SpecialityImpla" + ex.Message);
-            }
-        }
 
+            await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Especialidade deletada com", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Total de Especialidades0", "Validate if total count is 0");
+            await utils.ValidateTextIsVisibleOnScreen("Ativas0", "Validate if active count is 0");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.ImplaName + " teste Edição", "Search for deleted speciality");
+            await utils.ValidateTextIsVisibleOnScreen("Não há dados", "Validate if speciality was deleted");
+
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Allure.NUnit.Attributes;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
@@ -19,7 +19,7 @@ namespace OrtoGreenE2E.pages
         GeneralElements gen = new GeneralElements();
         private readonly ArrivalsData data;
 
-        public ArrivalsPage(IPage page, ArrivalsData data = null )
+        public ArrivalsPage(IPage page, ArrivalsData data = null)
         {
             this.page = page;
             this.data = data ?? new ArrivalsData();
@@ -33,7 +33,7 @@ namespace OrtoGreenE2E.pages
             Random random = new Random();
             int uniqueNumber = random.Next(0, 9999);
             return uniqueNumber.ToString();
-        }        
+        }
 
         public static string number = UniqueNumber();
         public string Obs { get; } = "Test " + number;
@@ -59,96 +59,67 @@ namespace OrtoGreenE2E.pages
 
         public async Task ConsultExistingAppointment()
         {
-            try
-            {
-                await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "insert patient name on search bar");
-                await utils.Click(gen.ButtonExpand("1"), "Click on button to expand data of appointment");
-                await utils.ValidateTextIsVisibleOnScreen(Obs, "Validate if obs messa is visible on table"); 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Existing appointment" + ex.Message);
-            }
+
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "insert patient name on search bar");
+            await utils.Click(gen.ButtonExpand("1"), "Click on button to expand data of appointment");
+            await utils.ValidateTextIsVisibleOnScreen(Obs, "Validate if obs messa is visible on table");
+
         }
 
         public async Task Checkin()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Chegadas" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por paciente, dentista" }).FillAsync(patientName);
-                await page.GetByRole(AriaRole.Button, new() { Name = "Confirmar" }).ClickAsync();
-                await Expect(page.GetByText("1").Nth(2)).ToBeVisibleAsync();
-                await Expect(page.Locator("//span[text()='Confirmada']")).ToBeVisibleAsync();
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "Check-in" }).ClickAsync();
-                await Expect(page.GetByText("Check-in realizado com sucesso")).ToBeVisibleAsync();
-                await Expect(page.GetByText("Check-in realizado!")).ToBeVisibleAsync();
+            await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
+            await utils.Click(gen.LocatorA("Chegadas"), "Click on Arrivals on main menu");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), patientName, "Insert patient name on search field");
+            await utils.Click(gen.LocatorSpanText("Confirmar"), "Click on confirm button");
+            await utils.ValidateTextIsVisibleOnScreen("1", "Validate if count is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Confirmada", "Validate if status is confirmed");
 
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible validate check-in" + ex.Message);
-            }
+            await utils.Click(gen.LocatorSpanText("Check-in"), "Click on check-in button");
+            await utils.ValidateTextIsVisibleOnScreen("Check-in realizado com sucesso", "Validate if check-in success message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Check-in realizado!", "Validate if check-in confirmation is visible");
 
         }
 
         public async Task Started()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Chegadas" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por paciente, dentista" }).FillAsync(patientName);
-                await Expect(page.GetByTitle("Confirmada")).ToBeVisibleAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Iniciar" }).ClickAsync();
-                await Expect(page.GetByText("Atendimento iniciado com")).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible validate Started appointment" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
+            await utils.Click(gen.LocatorA("Chegadas"), "Click on Arrivals on main menu");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), patientName, "Insert patient name on search field");
+            await utils.ValidateTextIsVisibleOnScreen("Confirmada", "Validate if status is confirmed");
+            await utils.Click(gen.LocatorSpanText("Iniciar"), "Click on start button");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento iniciado com", "Validate if appointment started message is visible");
 
         }
 
         public async Task InProgress()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Chegadas" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por paciente, dentista" }).FillAsync(patientName);
-                await Expect(page.GetByTitle("Em Atendimento")).ToBeVisibleAsync();
-                await Expect(page.GetByText("1").Nth(1)).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible validate appointment in progress" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
+            await utils.Click(gen.LocatorA("Chegadas"), "Click on Arrivals on main menu");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), patientName, "Insert patient name on search field");
+            await utils.ValidateTextIsVisibleOnScreen("Em Atendimento", "Validate if status is in progress");
+            await utils.ValidateTextIsVisibleOnScreen("1", "Validate if count is visible");
 
         }
 
         public async Task Canceled()
         {
-            try
-            {
-                await page.GetByRole(AriaRole.Complementary).GetByText("Agenda").ClickAsync();
-                await page.GetByRole(AriaRole.Link, new() { Name = "Chegadas" }).ClickAsync();
-                await page.GetByRole(AriaRole.Textbox, new() { Name = "Buscar por paciente, dentista" }).FillAsync(patientName);
-                await page.GetByRole(AriaRole.Button, new() { Name = "Finalizar" }).ClickAsync();
-                await Expect(page.GetByText("Atendimento finalizado!")).ToBeVisibleAsync();
-                await Expect(page.GetByText("Atendimento finalizado com")).ToBeVisibleAsync();
-                await page.GetByTitle("Concluída").ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Cancelar" }).ClickAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Sim, cancelar" }).ClickAsync();
-                await Expect(page.GetByText("Consulta cancelada com sucesso!")).ToBeVisibleAsync();
-                await Expect(page.GetByText("Consulta cancelada com sucesso", new() { Exact = true })).ToBeVisibleAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible validate canceled appointment" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
+            await utils.Click(gen.LocatorA("Chegadas"), "Click on Arrivals on main menu");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), patientName, "Insert patient name on search field");
+            await utils.Click(gen.LocatorSpanText("Finalizar"), "Click on finish button");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado!", "Validate if appointment finished message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado com", "Validate if finish confirmation is visible");
+            await utils.Click(gen.LocatorDiv("Concluída"), "Click on concluded status");
+            await utils.Click(gen.LocatorSpanText("Cancelar"), "Click on cancel button");
+            await utils.Click(gen.LocatorSpanText("Sim, cancelar"), "Confirm cancellation");
+            await utils.ValidateTextIsVisibleOnScreen("Consulta cancelada com sucesso!", "Validate if cancellation message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Consulta cancelada com sucesso", "Validate if cancellation confirmation is visible");
+
         }
 
     }

@@ -28,74 +28,54 @@ namespace OrtogreenE2E.pages
 
         public async Task RegisterNewPatient()
         {
-            try
-            {
-                await utils.Click(gen.LocatorSpanText("Novo Paciente"), "Click on New Patient button");
-                await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName, "Insert patient name");
-                await utils.Write(gen.LocatorPlaceholder("email@exemplo.com"), data.Email, "Insert patient email");
-                await utils.Write(gen.LocatorPlaceholder("(11) 99999-"), data.Phone, "Insert patient phone");
-                await utils.Write(gen.LocatorPlaceholder("Selecione a data"), data.BirthDate, "Insert birth date");
-                await utils.Write(gen.LocatorPlaceholder("-000"), data.CEP, "Insert CEP");
-                await utils.Write(gen.LocatorPlaceholder("Nome da rua"), data.Street, "Insert street name");
-                await utils.Write(gen.LocatorPlaceholder("Número"), data.Number, "Insert number");
-                await utils.Write(gen.LocatorPlaceholder("Apto, Bloco, etc"), data.Complement, "Insert complement");
-                await utils.Write(gen.LocatorPlaceholder("Bairro"), data.Neighborhood, "Insert neighborhood");
-                await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");
-                await utils.Click(gen.SelectOrder("1"), "Click on state selector");
-                await utils.Click("São Paulo (SP)", "Select São Paulo state", true);
-                await utils.Write(gen.LocatorPlaceholder("Informações adicionais sobre"), data.Observation, "Insert observation");
-                await utils.Click(gen.LocatorSpanText("Criar Paciente"), "Click on create patient button");
-                await utils.ValidateTextIsVisibleOnScreen("Paciente criado com sucesso!", "Validate if success message is visible on screen");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Register a new Patient" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorSpanText("Novo Paciente"), "Click on New Patient button");
+            await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName, "Insert patient name");
+            await utils.Write(gen.LocatorPlaceholder("email@exemplo.com"), data.Email, "Insert patient email");
+            await utils.Write(gen.LocatorPlaceholder("(11) 99999-"), data.Phone, "Insert patient phone");
+            await utils.Write(gen.LocatorPlaceholder("Selecione a data"), data.BirthDate, "Insert birth date");
+            await utils.Write(gen.LocatorPlaceholder("-000"), data.CEP, "Insert CEP");
+            await utils.Write(gen.LocatorPlaceholder("Nome da rua"), data.Street, "Insert street name");
+            await utils.Write(gen.LocatorPlaceholder("Número"), data.Number, "Insert number");
+            await utils.Write(gen.LocatorPlaceholder("Apto, Bloco, etc"), data.Complement, "Insert complement");
+            await utils.Write(gen.LocatorPlaceholder("Bairro"), data.Neighborhood, "Insert neighborhood");
+            await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");
+            await utils.Click(gen.SelectOrder("1"), "Click on state selector");
+            await utils.Click("São Paulo (SP)", "Select São Paulo state", true);
+            await utils.Write(gen.LocatorPlaceholder("Informações adicionais sobre"), data.Observation, "Insert observation");
+            await utils.Click(gen.LocatorSpanText("Criar Paciente"), "Click on create patient button");
+            await utils.ValidateTextIsVisibleOnScreen("Paciente criado com sucesso!", "Validate if success message is visible on screen");
+
         }
 
         public async Task ConsultPatient()
         {
-            try
-            {
-                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Insert patient name on search field");
-                await utils.ValidateTextIsVisibleOnScreen(data.PatientName, "Validate if patient name is visible on table");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Consult a Patient" + ex.Message);
-            }
+            await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Insert patient name on search field");
+            await utils.ValidateTextIsVisibleOnScreen(data.PatientName, "Validate if patient name is visible on table");
+
+
         }
         public async Task EditPatient()
         {
-            try
-            {
-                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Search for patient");
-                await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Editar']", "Click on edit button");
-                await utils.Click(gen.LocatorPlaceholder("Nome completo do paciente"), "Click on patient name field");
-                await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName + " Editado", "Edit patient name");
-                await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
-                await utils.ValidateTextIsVisibleOnScreen("Paciente atualizado com", "Validate if success message is visible on screen");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible Edit a Patient" + ex.Message);
-            }
+
+            await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName, "Search for patient");
+            await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Editar']", "Click on edit button");
+            await utils.Click(gen.LocatorPlaceholder("Nome completo do paciente"), "Click on patient name field");
+            await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName + " Editado", "Edit patient name");
+            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.ValidateTextIsVisibleOnScreen("Paciente atualizado com", "Validate if success message is visible on screen");
+
         }
         public async Task DeletePatient()
         {
-            try
-            {
-                await utils.Click(gen.LocatorA("Pacientes"), "Click on Patients menu");
-                await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName + " Editado", "Search for edited patient");
-                await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Excluir']", "Click on delete button");
-                await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
-                await utils.ValidateTextIsVisibleOnScreen("Paciente deletado com sucesso!", "Validate if deletion message is visible");
-                await utils.ValidateTextIsVisibleOnScreen("Paciente excluído com sucesso", "Validate if deletion confirmation is visible");
-            }
-            catch (Exception ex)
-            {
-                throw new PlaywrightException("Don´t possible delete Patient" + ex.Message);
-            }
+
+            await utils.Click(gen.LocatorA("Pacientes"), "Click on Patients menu");
+            await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou"), data.PatientName + " Editado", "Search for edited patient");
+            await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Excluir']", "Click on delete button");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
+            await utils.ValidateTextIsVisibleOnScreen("Paciente deletado com sucesso!", "Validate if deletion message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Paciente excluído com sucesso", "Validate if deletion confirmation is visible");
+
         }
 
     }
