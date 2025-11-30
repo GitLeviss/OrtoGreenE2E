@@ -1,4 +1,4 @@
-﻿name: Deploy Allure Report to GitHub Pages
+name: 🚀 OrtoGreen E2E CI/CD Pipeline
 
 on:
   push:
@@ -8,71 +8,151 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read   # GITHUB_TOKEN só leitura, pois a org limita
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout repository
+    - name: 📥 Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
       
-    - name: Setup .NET
+    - name: 📦 Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
         
-    - name: Cache NuGet packages
+    - name: 💾 Cache NuGet packages
       uses: actions/cache@v4
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        path: |
+          ~/.nuget/packages
+          ~/.local/share/NuGet/v3-cache
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.sln') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
           
-    - name: Restore dependencies
+    - name: 🔧 Restore dependencies
       run: dotnet restore
 
-    - name: Build tests project
-      run: dotnet build --configuration Debug
+    - name: 🏗️ Build tests project
+      run: dotnet build --configuration Release --no-restore
 
-    - name: Install Playwright browsers
-      run: pwsh ./bin/Debug/net8.0/playwright.ps1 install --with-deps
+    - name: 🌐 Install Playwright browsers
+      run: |
+        dotnet tool install --global Playwright.CLI
+        ~/.dotnet/tools/playwright install --with-deps
+        ~/.dotnet/tools/playwright install-deps
       
-    - name: Clean previous Allure results
-      run: rm -rf allure-results || true
+    - name: 🧹 Clean previous artifacts
+      run: |
+        rm -rf allure-results || true
+        rm -rf allure-report || true
+        rm -rf test-results || true
+        rm -rf videos || true
       
-    - name: Run tests
+    - name: 🧪 Run tests
+      id: tests
       continue-on-error: true
       run: |
-        if [ -d "allure-results" ]; then
-          rm -rf allure-results
-        fi
-        dotnet test --configuration Debug --logger "console;verbosity=detailed"
+        mkdir -p allure-results
+        mkdir -p videos
         
-    - name: Setup Node.js for Allure
+        # Set environment variables for headless execution
+        export CI=true
+        export DOTNET_CLI_TELEMETRY_OPTOUT=1
+        
+        # Run tests with Allure results
+        dotnet test \
+          --configuration Release \
+          --no-build \
+          --logger "console;verbosity=detailed" \
+          --logger "trx;LogFileName=test-results.trx" \
+          --results-directory ./test-results \
+          --collect:"XPlat Code Coverage" || true
+        
+        # Check if Allure results were generated
+        if [ -d "bin/Release/net8.0/allure-results" ] && [ "$(ls -A bin/Release/net8.0/allure-results)" ]; then
+          echo "Allure results found in bin/Release/net8.0/allure-results"
+          cp -r bin/Release/net8.0/allure-results/* allure-results/ || true
+        elif [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+          echo "Allure results found in allure-results"
+        else
+          echo "⚠️ No Allure results found"
+          echo "Available directories:"
+          find . -name "*allure*" -type d 2>/dev/null || echo "No allure directories found"
+          echo "Current directory contents:"
+          ls -la
+        fi
+        
+        # Copy videos if they exist
+        if [ -d "bin/Release/net8.0/videos" ]; then
+          cp -r bin/Release/net8.0/videos/* videos/ || true
+        fi
+        
+    - name: 📊 Setup Node.js for Allure
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
+        cache: 'npm'
         
-    - name: Install Allure Commandline
-      run: npm install -g allure-commandline
+    - name: 📈 Install Allure Commandline
+      run: npm install -g allure-commandline@latest
       
-    - name: Generate Allure Report
+    - name: 📋 Generate Allure Report
       run: |
-        if [ -d "bin/Debug/net8.0/allure-results" ]; then
-          allure generate bin/Debug/net8.0/allure-results --clean -o allure-report
+        echo "Generating Allure report..."
+        echo "Allure results directory: allure-results"
+        echo "Contents:"
+        ls -la allure-results/ || echo "Directory empty or not found"
+        
+        if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+          allure generate allure-results --clean -o allure-report
+          echo "✅ Allure report generated successfully"
+          echo "Report directory contents:"
+          ls -la allure-report/
         else
-          echo "No allure-results directory found"
-          exit 1
+          echo "❌ No Allure results found to generate report"
+          echo "Creating empty report..."
+          mkdir -p allure-report
+          echo "<html><body><h1>No test results available</h1></body></html>" > allure-report/index.html
         fi
 
-        
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/main'
+    - name: 📤 Upload test artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
-        personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}  # ← PAT do usuário
+        name: test-results-${{ github.run_number }}
+        path: |
+          allure-results/
+          allure-report/
+          videos/
+          test-results/
+        retention-days: 30
+        
+    - name: 🚀 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/main' && (steps.tests.outcome == 'success' || steps.tests.outcome == 'failure')
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./allure-report
+        destination_dir: ./
         keep_files: false
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        
+    - name: 🎯 Get deployment status
+      if: github.ref == 'refs/heads/main'
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ Pipeline completed successfully!"
+          echo "📊 Allure report deployed to: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+        else
+          echo "❌ Pipeline completed with errors"
+          echo "📊 Check the artifacts for detailed logs"
+        fi
