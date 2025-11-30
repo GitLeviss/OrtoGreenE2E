@@ -32,6 +32,20 @@ namespace OrtogreenE2E.utils
                 throw new PlaywrightException($"Don´t Possible Found the element: {locator} to Write on step: {step} Details: {ex.Message}");
             }
         }
+        [AllureStep("Clear on step: {step}")]
+        public async Task Clear(string locator, string step)
+        {
+            try
+            {
+                var elemento = page.Locator(locator);
+                await elemento.WaitForAsync();
+                await elemento.ClearAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to Clear on step: {step} Details: {ex.Message}");
+            }
+        }
 
         [AllureStep("Click on step: {step}")]
         public async Task Click(string locator, string step, bool getByText = false)
