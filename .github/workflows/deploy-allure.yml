@@ -51,15 +51,21 @@ jobs:
       
     - name: 🧹 Clean previous artifacts
       run: |
+        echo "🗑️ Cleaning previous artifacts for fresh results..."
         rm -rf allure-results || true
         rm -rf allure-report || true
         rm -rf test-results || true
         rm -rf videos || true
+        rm -rf bin/Release/net8.0/allure-results || true
+        echo "✅ Cleanup completed!"
       
-    - name: 🧪 Run tests
+    - name: 🧪 Run tests with fresh Allure results
       id: tests
       continue-on-error: true
       run: |
+        echo "🚀 Starting fresh test execution..."
+        
+        # Create directories
         mkdir -p allure-results
         mkdir -p videos
         
@@ -67,7 +73,8 @@ jobs:
         export CI=true
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
         
-        # Run tests with Allure results
+        # Execute tests exactly like your local command
+        echo "📋 Running: dotnet test --configuration Release --no-build"
         dotnet test \
           --configuration Release \
           --no-build \
@@ -76,24 +83,29 @@ jobs:
           --results-directory ./test-results \
           --collect:"XPlat Code Coverage" || true
         
-        # Check if Allure results were generated
+        # Check and copy Allure results (equivalente ao seu comando local)
+        echo "🔍 Checking for Allure results..."
         if [ -d "bin/Release/net8.0/allure-results" ] && [ "$(ls -A bin/Release/net8.0/allure-results)" ]; then
-          echo "Allure results found in bin/Release/net8.0/allure-results"
+          echo "✅ Allure results found in bin/Release/net8.0/allure-results"
           cp -r bin/Release/net8.0/allure-results/* allure-results/ || true
+          echo "📁 Results copied to allure-results/"
         elif [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
-          echo "Allure results found in allure-results"
+          echo "✅ Allure results already in allure-results"
         else
           echo "⚠️ No Allure results found"
-          echo "Available directories:"
+          echo "🔍 Searching for Allure directories..."
           find . -name "*allure*" -type d 2>/dev/null || echo "No allure directories found"
-          echo "Current directory contents:"
+          echo "📂 Current directory contents:"
           ls -la
         fi
         
         # Copy videos if they exist
         if [ -d "bin/Release/net8.0/videos" ]; then
+          echo "📹 Copying test videos..."
           cp -r bin/Release/net8.0/videos/* videos/ || true
         fi
+        
+        echo "🎯 Test execution completed!"
         
     - name: 📊 Setup Node.js for Allure
       uses: actions/setup-node@v4
@@ -104,23 +116,26 @@ jobs:
     - name: 📈 Install Allure Commandline
       run: npm install -g allure-commandline@latest
       
-    - name: 📋 Generate Allure Report
+    - name: 📋 Generate Fresh Allure Report
       run: |
-        echo "Generating Allure report..."
-        echo "Allure results directory: allure-results"
-        echo "Contents:"
+        echo "📊 Generating fresh Allure report (equivalente ao seu comando local)..."
+        echo "📂 Allure results directory: allure-results"
+        echo "📋 Contents:"
         ls -la allure-results/ || echo "Directory empty or not found"
         
+        # Generate report with --clean (exatamente como seu comando local)
         if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+          echo "🚀 Running: allure generate allure-results --clean -o allure-report"
           allure generate allure-results --clean -o allure-report
-          echo "✅ Allure report generated successfully"
-          echo "Report directory contents:"
+          echo "✅ Fresh Allure report generated successfully!"
+          echo "📊 Report directory contents:"
           ls -la allure-report/
         else
           echo "❌ No Allure results found to generate report"
-          echo "Creating empty report..."
+          echo "📄 Creating fallback report..."
           mkdir -p allure-report
-          echo "<html><body><h1>No test results available</h1></body></html>" > allure-report/index.html
+          echo '<!DOCTYPE html><html><head><title>OrtoGreen E2E - No Test Results</title><style>body{font-family:Arial,sans-serif;text-align:center;margin-top:50px}.container{max-width:600px;margin:0 auto}.error{color:#e74c3c}.info{color:#3498db}</style></head><body><div class="container"><h1 class="error">🚨 No Test Results Available</h1><p class="info">The tests may have failed to generate Allure results.</p><p>Please check the pipeline logs for more details.</p></div></body></html>' > allure-report/index.html
+          echo "📄 Fallback report created"
         fi
 
     - name: 📤 Upload test artifacts
