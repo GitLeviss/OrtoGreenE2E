@@ -1,4 +1,5 @@
-﻿using Allure.NUnit.Attributes;
+﻿using Allure.NUnit;
+using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
@@ -13,6 +14,13 @@ using System.Threading.Tasks;
 
 namespace OrtoGreenE2E.tests
 {
+    [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
+    [AllureOwner("Levi")]
+    [Category("Criticality: Critical")]
+    [AllureSuite("Payment Box")]
+    [Category("Regression Tests")]
+    [AllureNUnit]
     public class MyPaymentsTests : TestBase
     {
         Utils utils;

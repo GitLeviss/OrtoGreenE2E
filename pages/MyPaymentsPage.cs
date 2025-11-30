@@ -2,12 +2,6 @@
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace OrtoGreenE2E.pages
 {
     public class MyPaymentsPage
@@ -32,10 +26,5 @@ namespace OrtoGreenE2E.pages
             await utils.Click(gen.LocatorSpanText(" Abrir Meu Caixa "), "click on open box payments button after all flow");
             await utils.ValidateTextIsVisibleOnScreen(data.successMessage, "Validate if message success be present on screen user");
         }
-
-
-
-
-
     }
 }
