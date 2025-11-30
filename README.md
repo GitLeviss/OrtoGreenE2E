@@ -330,6 +330,8 @@ https://seu-usuario.github.io/OrtoGreenE2E/
 
 Para dúvidas ou suporte:
 
+Link Relatório Allure: https://gitleviss.github.io/OrtoGreenE2E/#
+
 - 📧 **Email**: alveslevi@icloud.com
 
 ---
