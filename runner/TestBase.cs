@@ -36,7 +36,7 @@ namespace OrtogreenE2E.runner
 
             var launchOptions = new BrowserTypeLaunchOptions
             {
-                Headless = true,
+                Headless = false,
                 Args = new[] { "--no-sandbox", "--disable-dev-shm-usage" }
             };
 
@@ -60,6 +60,8 @@ namespace OrtogreenE2E.runner
             config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
             var linkPortal = config["Links:Ortogreen"];
             await page.GotoAsync(linkPortal!);
+            await page.EvaluateAsync("document.body.style.zoom='75%';");
+
 
             return page;
         }

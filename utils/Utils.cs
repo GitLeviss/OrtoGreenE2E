@@ -27,12 +27,12 @@ namespace OrtogreenE2E.utils
                 await elemento.WaitForAsync();
                 await elemento.FillAsync(text);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t Possible Found the element: " + locator + " to write on step: " + step);
+                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to Write on step: {step} Details: {ex.Message}");
             }
         }
-        
+
         [AllureStep("Click on step: {step}")]
         public async Task Click(string locator, string step, bool getByText = false)
         {
@@ -41,9 +41,9 @@ namespace OrtogreenE2E.utils
                 string text = locator;
                 if (getByText is true && !string.IsNullOrWhiteSpace(text))
                 {
-                    var elementoPorTexto = page.GetByText(locator);
-                    await elementoPorTexto.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
-                    await elementoPorTexto.ClickAsync();
+                    var textElement = page.GetByText(locator);
+                    await textElement.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
+                    await textElement.ClickAsync();
                     return;
                 }
 
@@ -51,9 +51,9 @@ namespace OrtogreenE2E.utils
                 await elemento.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
                 await elemento.ClickAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException("Don´t Possible Found the element: " + locator + " to click on step: " + step);
+                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to click on step: {step} Details: {ex.Message}");
             }
         }
 
@@ -64,9 +64,9 @@ namespace OrtogreenE2E.utils
             {
                 await Expect(page).ToHaveURLAsync(expectedUrl);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new PlaywrightException($"Don´t possible validate the url: {expectedUrl} on step: {step}");
+                throw new PlaywrightException($"Don´t possible validate the url: {expectedUrl} on step: {step} Details: {ex.Message}");
             }
         }
         [AllureStep("Select Option on step: {step}")]
@@ -92,6 +92,61 @@ namespace OrtogreenE2E.utils
             catch (Exception ex)
             {
                 throw new Exception($"Don´t possible found the text: {expectedText}, on screen" + ex.Message);
+            }
+        }
+        [AllureStep("Validate Element Visible On Screen on step: {step}")]
+        public async Task ValidateElementIsVisibleOnScreen(string locator, string step)
+        {
+            try
+            {
+                ILocator text = page.Locator(locator);
+                await Expect(text).ToBeVisibleAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Don´t possible found the element: {locator}, on screen" + ex.Message);
+            }
+        }
+        [AllureStep("Get Text of element - on step: {step}")]
+        public async Task<string> GetTextOfElement(string locator, string step)
+        {
+            try
+            {
+                string value = await page.Locator(locator).InnerTextAsync();
+
+                return value;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{locator} does not exist. Details: {ex.Message}");
+            }
+
+        }
+
+        [AllureStep("Scrool and maintain position - on step: {step}")]
+        public async Task ScrollToElementAndMaintainPosition(string locator, string step)
+        {
+            try
+            {
+                var element = page.Locator(locator);
+                await element.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
+                await element.ScrollIntoViewIfNeededAsync();
+
+                // Wait for any JavaScript to settle
+                await Task.Delay(1000);
+
+                // Check if element is still visible, if not scroll again
+                var isVisible = await element.IsVisibleAsync();
+                if (!isVisible)
+                {
+                    await element.ScrollIntoViewIfNeededAsync();
+                    await Task.Delay(500);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new PlaywrightException($"Don´t Possible Found the element:  {locator} to scroll and maintain position on step: {step}. Details {ex.Message}");
             }
         }
 
