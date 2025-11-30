@@ -73,40 +73,19 @@ O OrtoGreen E2E é um framework robusto de automação de testes projetado para 
 ```
 OrtoGreenE2E/
 ├── 📂 .github/workflows/           # CI/CD Configuration
-│   └── 📄 deploy-allure.yml       # GitHub Actions workflow
+│  
 ├── 📂 data/                        # Test Data Objects
-│   ├── 📄 ArrivalsData.cs         # Data for arrivals tests
-│   ├── 📄 AvailabilityData.cs     # Data for availability tests
-│   ├── 📄 DentistsData.cs         # Data for dentists tests
-│   ├── 📄 LoginData.cs            # Login credentials data
-│   ├── 📄 PatientsData.cs         # Patient test data
-│   ├── 📄 SpecialityData.cs       # Speciality test data
-│   └── 📄 TypeScheduleData.cs     # Schedule type data
+│   
 ├── 📂 locators/                    # Element Locators
-│   └── 📄 GeneralElements.cs       # Common element locators
+│   
 ├── 📂 pages/                       # Page Object Models
-│   ├── 📄 ArrivalsPage.cs         # Arrivals page interactions
-│   ├── 📄 AvailabilityPage.cs     # Availability page interactions
-│   ├── 📄 DentistsPage.cs         # Dentists page interactions
-│   ├── 📄 LoginPage.cs            # Login page interactions
-│   ├── 📄 PatientsPage.cs         # Patients page interactions
-│   ├── 📄 SpecialityPage.cs       # Speciality page interactions
-│   └── 📄 TypeSchedulePage.cs     # Schedule page interactions
+│  
 ├── 📂 runner/                      # Test Base Configuration
-│   └── 📄 TestBase.cs             # Base test class with setup/teardown
+│  
 ├── 📂 tests/                       # Test Cases
-│   ├── 📄 ArrivalsTests.cs        # Arrivals functionality tests
-│   ├── 📄 AvailabilityTests.cs    # Availability functionality tests
-│   ├── 📄 DentistsTests.cs        # Dentists functionality tests
-│   ├── 📄 LoginTests.cs           # Authentication tests
-│   ├── 📄 PatientsTests.cs        # Patients functionality tests
-│   ├── 📄 SpecialityTests.cs      # Speciality functionality tests
-│   └── 📄 TypeScheduleTests.cs    # Schedule functionality tests
+│  
 ├── 📂 utils/                       # Utility Classes
-│   ├── 📄 ScreenshotHelper.cs     # Screenshot capture utilities
-│   ├── 📄 Utils.cs                # Common utility functions
-│   ├── 📄 VideoHelper.cs          # Video recording utilities
-│   └── 📄 VideoUtils.cs           # Video processing utilities
+│   
 ├── 📄 .gitignore                   # Git ignore rules
 ├── 📄 allureconfig.json           # Allure configuration
 ├── 📄 appsettings.json            # Application configuration
@@ -351,10 +330,8 @@ https://seu-usuario.github.io/OrtoGreenE2E/
 
 Para dúvidas ou suporte:
 
-- 📧 **Email**: levi@exemplo.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/seu-usuario/OrtoGreenE2E/issues)
-- 📖 **Documentação**: [Wiki do Projeto](https://github.com/seu-usuario/OrtoGreenE2E/wiki)
+- 📧 **Email**: alveslevi@icloud.com
 
 ---
 
-**Desenvolvido com ❤️ para garantir a qualidade da aplicação OrtoGreen**
+**Desenvolvido com Foco em garantir a qualidade da aplicação OrtoGreen**
