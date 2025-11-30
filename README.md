@@ -24,15 +24,6 @@ Framework de automação de testes End-to-End para a aplicação OrtoGreen, dese
 
 O OrtoGreen E2E é um framework robusto de automação de testes projetado para validar os principais fluxos da aplicação web OrtoGreen. O framework utiliza Page Object Model (POM) para manutenibilidade, Playwright para automação web moderna, e Allure para relatórios detalhados e visuais.
 
-### Funcionalidades Principais
-
-- ✅ Autenticação de usuários (Login/Logout)
-- 👥 Gestão de Pacientes
-- 👨‍⚕️ Gestão de Dentistas
-- 📅 Gestão de Agendamentos
-- 🏥 Gestão de Especialidades
-- 📊 Gestão de Disponibilidade
-- 🚚 Gestão de Chegadas
 
 ## 🏗️ Arquitetura do Projeto
 
