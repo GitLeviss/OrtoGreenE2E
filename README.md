@@ -32,39 +32,39 @@ O OrtoGreen E2E é um framework robusto de automação de testes projetado para 
 │                    OrtoGreen E2E Framework                  │
 ├─────────────────────────────────────────────────────────────┤
 │  🎭 Test Execution Layer                                    │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
-│  │ LoginTests  │ │ PatientTests│ │ DentistTests│           │
-│  │ ArrivalsTests│ │Availability │ │Speciality   │           │
-│  │ ScheduleTests│ │   Tests     │ │   Tests     │           │
-│  └─────────────┘ └─────────────┘ └─────────────┘           │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │ LoginTests  │ │ PatientTests│ │ DentistTests│            │
+│  │ArrivalsTests│ │Availability │ │Speciality   │            │
+│  │ScheduleTests│ │   Tests     │ │   Tests     │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 ├─────────────────────────────────────────────────────────────┤
 │  📄 Page Object Layer                                       │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
-│  │ LoginPage   │ │PatientsPage  │ │DentistsPage │           │
-│  │ArrivalsPage │ │Availability  │ │SpecialityPage│          │
-│  │SchedulePage │ │   Page       │ │TypeSchedule │           │
-│  └─────────────┘ └─────────────┘ └─────────────┘           │
+│  ┌─────────────┐ ┌─────────────┐ ┌──────────────┐           │
+│  │ LoginPage   │ │PatientsPage │ │DentistsPage  │           │
+│  │ArrivalsPage │ │Availability │ │SpecialityPage│           │
+│  │SchedulePage │ │   Page      │ │TypeSchedule  │           │
+│  └─────────────┘ └─────────────┘ └──────────────┘           │
 ├─────────────────────────────────────────────────────────────┤
 │  🔧 Utility & Support Layer                                 │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
-│  │ TestBase    │ │   Utils     │ │Screenshot   │           │
-│  │   (Runner)  │ │  (Helpers)  │ │  Helper     │           │
-│  │             │ │VideoHelper  │ │VideoUtils   │           │
-│  └─────────────┘ └─────────────┘ └─────────────┘           │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │ TestBase    │ │   Utils     │ │Screenshot   │            │
+│  │   (Runner)  │ │  (Helpers)  │ │  Helper     │            │
+│  │             │ │VideoHelper  │ │VideoUtils   │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 ├─────────────────────────────────────────────────────────────┤
 │  📊 Data & Configuration Layer                              │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
+│  ┌─────────────┐ ┌─────────────┐ ┌───────────────┐          │
 │  │ LoginData   │ │PatientsData │ │GeneralElements│          │
-│  │ DentistsData│ │Speciality   │ │Locators     │           │
-│  │ ScheduleData│ │   Data      │ │             │           │
-│  └─────────────┘ └─────────────┘ └─────────────┘           │
+│  │ DentistsData│ │Speciality   │ │Locators       │          │
+│  │ ScheduleData│ │   Data      │ │               │          │
+│  └─────────────┘ └─────────────┘ └───────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  🌐 Infrastructure Layer                                    │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
-│  │ Playwright  │ │   NUnit     │ │   Allure    │           │
-│  │   Browser   │ │  Framework  │ │  Reporting  │           │
-│  │ Automation  │ │             │ │             │           │
-│  └─────────────┘ └─────────────┘ └─────────────┘           │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │ Playwright  │ │   NUnit     │ │   Allure    │            │
+│  │   Browser   │ │  Framework  │ │  Reporting  │            │
+│  │ Automation  │ │             │ │             │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
