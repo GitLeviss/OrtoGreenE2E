@@ -224,7 +224,7 @@ npm install -g allure-commandline
 2. **Execute os Testes:**
 
 ```bash
-dotnet test --configuration Debug
+if (Test-Path "allure-results") { Remove-Item "allure-results" -Recurse -Force }; dotnet test; allure generate allure-results --clean; allure open allure-report
 ```
 
 3. **Gere o Relatório:**
