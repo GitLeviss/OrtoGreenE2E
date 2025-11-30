@@ -45,9 +45,29 @@ jobs:
 
     - name: 🌐 Install Playwright browsers
       run: |
-        dotnet tool install --global Playwright.CLI
-        ~/.dotnet/tools/playwright install --with-deps
-        ~/.dotnet/tools/playwright install-deps
+        echo "🌐 Installing Playwright browsers using native method..."
+        
+        # Method 1: Try using the built Playwright installation from build output
+        if [ -f "./bin/Release/net8.0/playwright.ps1" ]; then
+          echo "✅ Found playwright.ps1 in build output"
+          pwsh ./bin/Release/net8.0/playwright.ps1 install --with-deps
+        elif command -v playwright &> /dev/null; then
+          echo "✅ Playwright CLI found in PATH"
+          playwright install --with-deps
+        else
+          echo "📦 Installing Microsoft.Playwright.CLI as fallback..."
+          dotnet tool install --global Microsoft.Playwright.CLI
+          ~/.dotnet/tools/playwright install --with-deps
+        fi
+        
+        echo "🔧 Installing system dependencies..."
+        if command -v playwright &> /dev/null; then
+          playwright install-deps
+        elif [ -f "$HOME/.dotnet/tools/playwright" ]; then
+          $HOME/.dotnet/tools/playwright install-deps
+        else
+          echo "⚠️ Could not install Playwright dependencies, but continuing..."
+        fi
       
     - name: 🧹 Clean previous artifacts
       run: |
