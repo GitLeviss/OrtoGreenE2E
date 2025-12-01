@@ -16,6 +16,8 @@ namespace OrtoGreenE2E.locators
         public string SelectOrder (string position) => $"(//div[@class='n-select'])[{position}]";
         public string RadioOrder (string position) => $"(//div[@class='n-radio__dot'])[{position}]";
         public string ButtonExpand(string position) => $"(//tr//i[@class='n-base-icon'])[{position}]";
+        public string ActiveCard { get; } = "//div[text()='Ativas']//following-sibling::div";
+        public string FirstTdOnTable { get; } = "(//td[1]//span//span//div)[1]";
 
 
     }

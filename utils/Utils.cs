@@ -108,6 +108,19 @@ namespace OrtogreenE2E.utils
                 throw new Exception($"Don´t possible found the text: {expectedText}, on screen" + ex.Message);
             }
         }
+        [AllureStep("Validate Text Visible On Screen on step: {step}")]
+        public async Task ValidateTextIsNotVisibleOnScreen(string expectedText, string step)
+        {
+            try
+            {
+                ILocator text = page.GetByText(expectedText);
+                await Expect(text).Not.ToBeVisibleAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Don´t possible found the text: {expectedText}, on screen" + ex.Message);
+            }
+        }
         [AllureStep("Validate Element Visible On Screen on step: {step}")]
         public async Task ValidateElementIsVisibleOnScreen(string locator, string step)
         {
@@ -130,6 +143,36 @@ namespace OrtogreenE2E.utils
 
                 return value;
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{locator} does not exist. Details: {ex.Message}");
+            }
+
+        }
+
+        [AllureStep("Get Text of element - on step: {step}")]
+        public async Task GetTextOfElementConvertToIntAndCompare(string locator, int expectedValue, string step)
+        {
+            try
+            {
+                string value = await page.Locator(locator).InnerTextAsync();
+                int intValue = Convert.ToInt32(value);
+                Assert.That(expectedValue, Is.EqualTo(intValue));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{locator} does not exist. Details: {ex.Message}");
+            }
+
+        }
+        [AllureStep("Get Text of element - on step: {step}")]
+        public async Task GetTextOfElementAndCompare(string locator,string expectedText, string step)
+        {
+            try
+            {
+                string text = await page.Locator(locator).InnerTextAsync();
+                await Expect(page.Locator(locator)).ToHaveTextAsync(expectedText);
             }
             catch (Exception ex)
             {
