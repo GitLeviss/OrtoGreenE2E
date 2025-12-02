@@ -83,7 +83,10 @@ jobs:
         # Set environment variables for headless execution
         export CI=true
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
-        
+        env:
+        ORTOGREEN_EMAIL: ${{ secrets.ORTOGREEN_EMAIL }}
+        ORTOGREEN_PASS: ${{ secrets.ORTOGREEN_PASS }}
+
         # Execute tests exactly like your local command
         echo "📋 Running: dotnet test --configuration Release --no-build"
         dotnet test \
