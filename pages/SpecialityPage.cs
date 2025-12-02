@@ -26,39 +26,40 @@ namespace OrtogreenE2E.pages
             utils = new Utils(page);
         }
 
-        public async Task RegisterSpecialityOrto()
+        public async Task RegisterSpeciality(string specialityName)
         {
 
             await utils.Click(gen.LocatorSpanText(" Nova Especialidade "), "Click on New Speciality button");
-            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia, Implantodontia, Endodontia"), data.OrtoName, "Insert orthodontics speciality name");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia, Implantodontia, Endodontia"), specialityName, $"Insert {specialityName} speciality name");
             await utils.Click(gen.LocatorSpanText(" Salvar Especialidade"), "Click on save speciality button");
             await utils.ValidateTextIsVisibleOnScreen("Especialidade criada com sucesso!", "Validate if success message is visible on screen");
 
         }
 
-        public async Task ConsultSpecialityOrto()
+        public async Task ConsultSpeciality(string specialityName)
         {
-            await utils.Write(gen.LocatorPlaceholder("Buscar..."), data.OrtoName, "Search to orto name on search bar");
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), specialityName, "Search to orto name on search bar");
             await utils.GetTextOfElementConvertToIntAndCompare(gen.ActiveCard, 1, "Validate if value of active specialities is 1");
-            await utils.GetTextOfElementAndCompare(gen.FirstTdOnTable, data.OrtoName, "Get Name of active speciality");
+            await utils.GetTextOfElementAndCompare(gen.FirstTdOnTable, specialityName, "Get Name of active speciality");
         }
 
-        public async Task EditSpecialityOrto()
+        public async Task EditSpeciality(string specialityName)
         {
             await utils.Click(gen.LocatorSpanText("Editar"), "Click on edit button");
-            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia, Implantodontia, Endodontia"), data.OrtoName + " teste Edição", "Edit speciality orto name");
+            await utils.Write(gen.LocatorPlaceholder("Ex: Ortodontia, Implantodontia, Endodontia"), specialityName + " teste Edição", $"Edit speciality {specialityName} name");
             await utils.Click(gen.LocatorSpanText(" Salvar Alterações"), "Click on save changes button");
             await utils.ValidateTextIsVisibleOnScreen("Especialidade atualizada com sucesso!", "Validate if success message is visible on screen");
-            await utils.GetTextOfElementAndCompare(gen.FirstTdOnTable, data.OrtoName + " teste Edição", "Get Name of active speciality orto edited");
+            await utils.GetTextOfElementAndCompare(gen.FirstTdOnTable, specialityName + " teste Edição", $"Get Name of active speciality {specialityName} edited");
         }
 
-        public async Task DeleteSpecialityOrto()
+        public async Task DeleteSpeciality(string specialityName)
         {
+            await utils.Write(gen.LocatorPlaceholder("Buscar..."), specialityName, "Search to orto name on search bar");
             await utils.Click(gen.LocatorSpanText("Excluir"), "Click on delete button");
-            await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion of speciality orto");
+            await utils.Click(gen.LocatorSpanText("Sim, excluir"), $"Confirm deletion of speciality {specialityName}");
             await utils.ValidateTextIsVisibleOnScreen("Especialidade deletada com sucesso!", "Validate if deletion message is visible");
             await utils.GetTextOfElementConvertToIntAndCompare(gen.ActiveCard, 0, "Validate if value of active specialities is 0 after excluded all");
-            await utils.ValidateTextIsNotVisibleOnScreen(data.OrtoName + " teste Edição", "Search for deleted orto speciality");
+            await utils.ValidateTextIsNotVisibleOnScreen(data.OrtoName + " teste Edição", $"Search for deleted {specialityName} speciality");
 
         }
 
