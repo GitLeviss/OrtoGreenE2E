@@ -39,11 +39,7 @@ namespace OrtogreenE2E.pages
             await utils.Write(gen.LocatorPlaceholder("Número"), data.Number, "Insert number");
             await utils.Write(gen.LocatorPlaceholder("Apto, Bloco, etc"), data.Complement, "Insert complement");
             await utils.Write(gen.LocatorPlaceholder("Bairro"), data.Neighborhood, "Insert neighborhood");
-            await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");            
-            await utils.Click(gen.SelectOrder("1"), "Click on state selector");
-            await utils.Write(gen.SelectOrder("1"), data.State, "Click on state selector");
-            await utils.Click("São Paulo (SP)", "Select São Paulo state", true);
-            await utils.Write(gen.LocatorPlaceholder("Informações adicionais sobre o paciente"), data.Observation, "Insert observation");
+            await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");
             await utils.Click(gen.LocatorSpanText(" Criar Paciente"), "Click on create patient button");
             await utils.ValidateTextIsVisibleOnScreen("Paciente criado com sucesso!", "Validate if success message is visible on screen");
 
@@ -63,7 +59,7 @@ namespace OrtogreenE2E.pages
             await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Editar']", "Click on edit button");
             await utils.Click(gen.LocatorPlaceholder("Nome completo do paciente"), "Click on patient name field");
             await utils.Write(gen.LocatorPlaceholder("Nome completo do paciente"), data.PatientName + " Editado", "Edit patient name");
-            await utils.Click(gen.LocatorSpanText("Salvar Alterações"), "Click on save changes button");
+            await utils.Click(gen.LocatorSpanText(" Salvar Alterações"), "Click on save changes button");
             await utils.ValidateTextIsVisibleOnScreen("Paciente atualizado com sucesso!", "Validate if success message is visible on screen");
 
         }
@@ -72,7 +68,7 @@ namespace OrtogreenE2E.pages
 
             await utils.Click(gen.LocatorA("Pacientes"), "Click on Patients menu");
             await utils.Write(gen.LocatorPlaceholder("Nome, código, CPF, email ou telefone..."), data.PatientName + " Editado", "Search for edited patient");
-            await utils.Click($"//div[text()='{data.PatientName}']/ancestor::tr//span[text()='Excluir']", "Click on delete button");
+            await utils.Click(gen.LocatorDiv(data.PatientName + " Editado")+"/ancestor::tr//td[5]" + gen.LocatorSpanText("Excluir"), "Click on delete button");
             await utils.Click(gen.LocatorSpanText("Sim, excluir"), "Confirm deletion");
             await utils.ValidateTextIsVisibleOnScreen("Paciente deletado com sucesso!", "Validate if deletion message is visible");
             await utils.ValidateTextIsVisibleOnScreen("Paciente excluído com sucesso", "Validate if deletion confirmation is visible");
