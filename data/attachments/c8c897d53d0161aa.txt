@@ -1,2 +1,0 @@
-Appointment confirmed
-Vídeo anexado: OrtogreenE2E_tests_ArrivalsTests_Should_Contain_CheckIn_in_Arrivals_Passed_20251208_030528.webm (568991 bytes)
