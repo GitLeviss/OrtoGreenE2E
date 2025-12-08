@@ -28,16 +28,16 @@ namespace OrtogreenE2E.pages
 
         public async Task DoLogin()
         {
-            await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-            await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
             await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
             await utils.ValidateUrl("https://urboz.com/app/dashboard", "Validate Url on dash page");
         }
         public async Task Logout()
         {
 
-            await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-            await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
             await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
             await utils.ValidateUrl("https://urboz.com/app/dashboard", "Validate Url on dash page");
             await utils.Click("//button[text()='LA']", "Click on menu login button");
@@ -53,8 +53,8 @@ namespace OrtogreenE2E.pages
         {
 
             await Task.Delay(500);
-            await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-            await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+            await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
             await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
 
 
@@ -65,20 +65,20 @@ namespace OrtogreenE2E.pages
             switch (testCase)
             {
                 case "Invalid Password":
-                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
                     await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
                     await Expect(page.GetByText("Email ou senha inválidos")).ToBeVisibleAsync();
                     break;
                 case "Invalid Email":
-                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
                     await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
                     await Expect(page.GetByText("Erro ao fazer login")).ToBeVisibleAsync();
                     break;
                 case "Empty Fields":
-                    await utils.Write(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
-                    await utils.Write(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("seu@email.com"), data.UserEmail, "Insert user email to do login");
+                    await utils.WriteCredentials(gen.LocatorPlaceholder("Sua senha"), data.UserPassword, "Insert user password to do login");
                     await utils.Click(gen.LocatorSpanText(" Entrar "), "Click on submit button to do login");
                     await utils.ValidateTextIsVisibleOnScreen("Erro ao fazer login", "Validate if error message is visible on screen of user");
                     await utils.ValidateTextIsVisibleOnScreen("Email é obrigatório", "Validate if message mandatory email is visible on screen of user");

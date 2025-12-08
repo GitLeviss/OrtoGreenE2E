@@ -32,6 +32,19 @@ namespace OrtogreenE2E.utils
                 throw new PlaywrightException($"Don´t Possible write on element: {locator} on step: {step} Details: {ex.Message}");
             }
         }
+        public async Task WriteCredentials(string locator, string text, string step)
+        {
+            try
+            {
+                var elemento = page.Locator(locator);
+                await elemento.WaitForAsync();
+                await elemento.FillAsync(text);
+            }
+            catch (Exception ex)
+            {
+                throw new PlaywrightException($"Don´t Possible write on element: {locator} on step: {step} Details: {ex.Message}");
+            }
+        }
         [AllureStep("Clear on step: {step}")]
         public async Task Clear(string locator, string step)
         {
