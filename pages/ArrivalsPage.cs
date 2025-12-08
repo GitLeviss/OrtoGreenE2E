@@ -1,3 +1,4 @@
+using Allure.Net.Commons;
 using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.utils;
@@ -43,7 +44,7 @@ namespace OrtoGreenE2E.pages
 
         public async Task ScheduleAppointment()
         {
-
+            string status = "AGENDADA";
             await utils.Click(gen.LocatorSpanText(" Nova Consulta "), "Click on New to create a new schedule");
             await Task.Delay(500);
             await utils.Click(gen.SelectOrder("1"), "Click on first select to select a patient");
@@ -56,6 +57,7 @@ namespace OrtoGreenE2E.pages
             //await utils.Write(gen.LocatorPlaceholder("Observações sobre a consulta..."), Obs, "Insert observation");
             await utils.Click(gen.LocatorSpanText(" Salvar Agendamento"), "Click on sabe appointment");
             await utils.ValidateTextIsVisibleOnScreen("Consulta agendada com sucesso!", "Validate if success message is visible on screen of user");
+            await utils.ValidateElementIsVisibleOnScreen(gen.StatusOnTable(status), $"Validate if status on table is {status}");
         }
 
         public async Task ConsultExistingAppointment()
@@ -69,6 +71,7 @@ namespace OrtoGreenE2E.pages
 
         public async Task Checkin()
         {
+            string status = "CONFIRMADA";
             await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
             string quantityOfAppointments = await utils.GetTextOfElement(gen.LocatorDiv("Confirmadas") + "/following-sibling::div", "Get quantity of confirm appointments");
             int qtt1 = Convert.ToInt32(quantityOfAppointments);
@@ -82,41 +85,57 @@ namespace OrtoGreenE2E.pages
             }
             await utils.Click(gen.LocatorSpanText("Check-in"), "Click on check-in button");
             await utils.ValidateTextIsVisibleOnScreen("Check-in realizado com sucesso", "Validate if check-in success message is visible");
-            await utils.Click(gen.LocatorSpanText("Chamar"), "Call patient to appointment");
-            await utils.ValidateTextIsVisibleOnScreen("Paciente chamado com sucesso!", "Validate if call patient success message is visible");
 
         }
 
+        public async Task Call()
+        {
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.Click("(" + gen.LocatorSpanText("Chamar") + ")[1]", "Call patient to appointment");
+            await utils.ValidateTextIsVisibleOnScreen("Paciente chamado com sucesso!", "Validate if call patient success message is visible");
+        }
+        
+
         public async Task Started()
         {
-
-            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), data.PatientName, "Insert patient name on search field");
-            await utils.Click(gen.LocatorSpanText("Iniciar"), "Click on start button");
-            await utils.ValidateTextIsVisibleOnScreen("Atendimento iniciado com", "Validate if appointment started message is visible");
+            string status = "ATENDENDO";
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.Click("(" + gen.LocatorSpanText("Iniciar") + ")[1]", "Click on start button");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento iniciado com sucesso", "Validate if appointment started message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento iniciado!", "Validate if appointment started message is visible");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.Click("(" + gen.LocatorSpanText("Pausar") + ")[1]", "pause appointment");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento pausado!", "Validate if call patient success message is visible");
+            await utils.Click("(" + gen.LocatorSpanText("Retomar") + ")[1]", "Call patient to appointment");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento retomado!", "Validate if call patient success message is visible");
+            await utils.ValidateElementIsVisibleOnScreen(gen.StatusOnTable(status), $"Validate if status on table is {status}");
 
         }
 
         public async Task InProgress()
         {
 
-            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), data.PatientName, "Insert patient name on search field");
-            await utils.ValidateTextIsVisibleOnScreen("Em Atendimento", "Validate if status is in progress");
-            await utils.ValidateTextIsVisibleOnScreen("1", "Validate if count is visible");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.GetTextOfElementConvertToIntAndCompare(gen.InProgressCard,1, "Validate if status is in progress");
 
         }
 
         public async Task Canceled()
         {
-
-            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista"), data.PatientName, "Insert patient name on search field");
-            await utils.Click(gen.LocatorSpanText("Finalizar"), "Click on finish button");
-            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado!", "Validate if appointment finished message is visible");
-            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado com", "Validate if finish confirmation is visible");
-            await utils.Click(gen.LocatorDiv("Concluída"), "Click on concluded status");
-            await utils.Click(gen.LocatorSpanText("Cancelar"), "Click on cancel button");
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.Click("(" + gen.LocatorSpanText("Cancelar") + ")[1]", "Click on cancel button");
             await utils.Click(gen.LocatorSpanText("Sim, cancelar"), "Confirm cancellation");
             await utils.ValidateTextIsVisibleOnScreen("Consulta cancelada com sucesso!", "Validate if cancellation message is visible");
-            await utils.ValidateTextIsVisibleOnScreen("Consulta cancelada com sucesso", "Validate if cancellation confirmation is visible");
+        }
+
+        public async Task Finalize()
+        {
+            string status = "CONCLUÍDA";
+            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
+            await utils.Click("(" + gen.LocatorSpanText("Finalizar") + ")[1]", "Click on finish button");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado!", "Validate if appointment finished message is visible");
+            await utils.ValidateTextIsVisibleOnScreen("Atendimento finalizado com", "Validate if finish confirmation is visible");
+            await utils.ValidateElementIsVisibleOnScreen(gen.StatusOnTable(status), $"Validate if status on table is {status}");
 
         }
 

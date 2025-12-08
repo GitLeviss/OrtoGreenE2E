@@ -40,6 +40,9 @@ namespace OrtogreenE2E.pages
             await utils.Write(gen.LocatorPlaceholder("Apto, Bloco, etc"), data.Complement, "Insert complement");
             await utils.Write(gen.LocatorPlaceholder("Bairro"), data.Neighborhood, "Insert neighborhood");
             await utils.Write(gen.LocatorPlaceholder("Cidade"), data.City, "Insert city");
+            await utils.Click(gen.SelectOrder("2"), "set state");
+            //await utils.Write(gen.SelectOrder("2"), data.State, "set state");            
+            //await utils.Click(data.State, "click on option state", true);
             await utils.Click(gen.LocatorSpanText(" Criar Paciente"), "Click on create patient button");
             await utils.ValidateTextIsVisibleOnScreen("Paciente criado com sucesso!", "Validate if success message is visible on screen");
 

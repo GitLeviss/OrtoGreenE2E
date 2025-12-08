@@ -29,7 +29,7 @@ namespace OrtogreenE2E.utils
             }
             catch (Exception ex)
             {
-                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to Write on step: {step} Details: {ex.Message}");
+                throw new PlaywrightException($"Don´t Possible write on element: {locator} on step: {step} Details: {ex.Message}");
             }
         }
         [AllureStep("Clear on step: {step}")]
@@ -43,7 +43,7 @@ namespace OrtogreenE2E.utils
             }
             catch (Exception ex)
             {
-                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to Clear on step: {step} Details: {ex.Message}");
+                throw new PlaywrightException($"Don´t Possible clear on element: {locator} on step: {step} Details: {ex.Message}");
             }
         }
 
@@ -67,7 +67,7 @@ namespace OrtogreenE2E.utils
             }
             catch (Exception ex)
             {
-                throw new PlaywrightException($"Don´t Possible Found the element: {locator} to click on step: {step} Details: {ex.Message}");
+                throw new PlaywrightException($"Don´t Possible click on element: {locator} on step: {step} Details: {ex.Message}");
             }
         }
 

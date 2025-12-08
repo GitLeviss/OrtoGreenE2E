@@ -45,28 +45,28 @@ namespace OrtogreenE2E.tests
         }
 
         [Test, Order(1)]
-        [AllureName("Should Register a Patients")]
+        [AllureName("Should Register a Patient")]
         public async Task Should_Register_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.RegisterNewPatient();
         }
         [Test, Order(2)]
-        [AllureName("Should Consult a Patients")]
+        [AllureName("Should Consult a Patient")]
         public async Task Should_Consult_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.ConsultPatient();
         }
         [Test, Order(3)]
-        [AllureName("Should Edit a Patients")]
+        [AllureName("Should Edit a Patient")]
         public async Task Should_Edit_a_Patients()
         {
             var patients = new PatientsPage(page);
             await patients.EditPatient();
         }
         [Test, Order(4)]
-        [AllureName("Should Delete a Patients")]
+        [AllureName("Should Delete a Patient")]
         public async Task Should_Delete_a_Patients()
         {
             var patients = new PatientsPage(page);
