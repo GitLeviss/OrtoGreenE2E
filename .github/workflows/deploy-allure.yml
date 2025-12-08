@@ -170,7 +170,7 @@ jobs:
         
     - name: 🚀 Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
-      #if: github.ref == 'refs/heads/main' && (steps.tests.outcome == 'success' || steps.tests.outcome == 'failure')
+      if: github.ref == 'refs/heads/main' && (steps.tests.outcome == 'success' || steps.tests.outcome == 'failure')
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./allure-report
@@ -180,7 +180,7 @@ jobs:
         user_email: 'github-actions[bot]@users.noreply.github.com'
         
     - name: 🎯 Get deployment status
-      #if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
       run: |
         if [ "${{ job.status }}" == "success" ]; then
           echo "✅ Pipeline completed successfully!"
