@@ -1,13 +1,11 @@
 name: 🚀 OrtoGreen E2E CI/CD Pipeline
 
 on:
-  repository_dispatch:
-    types: [run-tests-after-deploy]
-    push:
-      branches: [ main ]
-    pull_request:
-      branches: [ main ]
-    workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: write
