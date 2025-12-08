@@ -67,24 +67,39 @@ namespace OrtogreenE2E.tests
             await arrivals.Checkin();
         }
         [Test, Order(4)]
+        [AllureName("Should Call Patient to appointment")]
+        public async Task Should_Call_Patient_in_Arrivals()
+        {
+            var arrivals = new ArrivalsPage(page);
+            await arrivals.Call();
+        }
+        [Test, Order(5)]
         [AllureName("Should Contain Started in Arrivals")]
         public async Task Should_Contain_Started_In_Arrival()
         {
             var arrivals = new ArrivalsPage(page);
             await arrivals.Started();
         }
-        [Test, Order(5)]
+        [Test, Order(6)]
         [AllureName("Should Contain InProgress in Arrivals")]
         public async Task Should_Contain_InProgress_In_Arrival()
         {
             var arrivals = new ArrivalsPage(page);
             await arrivals.InProgress();
         }
-        [Test, Order(6)]
+        [Test, Order(7)]
+        [AllureName("Should Finalize Arrival")]
+        public async Task Should_Finalize_Arrival()
+        {
+            var arrivals = new ArrivalsPage(page);
+            await arrivals.Finalize();
+        }
+        [Test, Order(8)]
         [AllureName("Should Contain Canceled in Arrivals")]
         public async Task Should_Contain_Canceled_In_Arrival()
         {
             var arrivals = new ArrivalsPage(page);
+            await arrivals.ScheduleAppointment();
             await arrivals.Canceled();
         }
 

@@ -18,7 +18,7 @@ namespace OrtoGreenE2E.data
         public string Complement { get; set; } = "casa";
         public string Neighborhood { get; set; } = "Munhoz Junior";
         public string City { get; set; } = "Osasco";
-        public string State { get; set; } = "SP";
+        public string State { get; set; } = "São Paulo (SP)";
         public string Observation { get; set; } = "apenas testando";
     }
 }
