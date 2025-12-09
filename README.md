@@ -215,6 +215,8 @@ dotnet test --configuration Debug --logger "console;verbosity=detailed"
 
 ### Gerar Relatório Localmente
 
+Link Relatório Allure: https://gitleviss.github.io/OrtoGreenE2E/#
+
 1. **Instale o Allure Commandline:**
 
 ```bash
@@ -330,7 +332,7 @@ https://seu-usuario.github.io/OrtoGreenE2E/
 
 Para dúvidas ou suporte:
 
-Link Relatório Allure: https://gitleviss.github.io/OrtoGreenE2E/#
+
 
 - 📧 **Email**: alveslevi@icloud.com
 
