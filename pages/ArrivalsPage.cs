@@ -70,8 +70,7 @@ namespace OrtoGreenE2E.pages
         }
 
         public async Task Checkin()
-        {
-            string status = "CONFIRMADA";
+        {            
             await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
             string quantityOfAppointments = await utils.GetTextOfElement(gen.LocatorDiv("Confirmadas") + "/following-sibling::div", "Get quantity of confirm appointments");
             int qtt1 = Convert.ToInt32(quantityOfAppointments);
