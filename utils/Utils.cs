@@ -23,9 +23,12 @@ namespace OrtogreenE2E.utils
         {
             try
             {
-                var elemento = page.Locator(locator);
-                await elemento.WaitForAsync();
-                await elemento.FillAsync(text);
+                var element = page.Locator(locator);
+                await Expect(element).ToBeVisibleAsync();
+                await Expect(element).ToBeEnabledAsync();
+                await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+                await element.FocusAsync();
+                await element.FillAsync(text);
             }
             catch (Exception ex)
             {
@@ -74,9 +77,15 @@ namespace OrtogreenE2E.utils
                     return;
                 }
 
-                var elemento = page.Locator(locator);
-                await elemento.WaitForAsync(new LocatorWaitForOptions { Timeout = 60000 });
-                await elemento.ClickAsync();
+                var element = page.Locator(locator);
+
+                await Expect(element).ToBeVisibleAsync();
+                await Expect(element).ToBeEnabledAsync();
+                await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+                await element.ClickAsync(new LocatorClickOptions
+                {
+                    Timeout = 60000
+                });
             }
             catch (Exception ex)
             {

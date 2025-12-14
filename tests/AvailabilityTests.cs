@@ -34,7 +34,7 @@ namespace OrtogreenE2E.tests
             utils = new Utils(page);
             var login = new LoginPage(page);
             await login.Login();
-            await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
+            await utils.Click(gen.LocatorDiv("Configurações"), "Click on Config on main menu");
             await utils.Click(gen.LocatorA("Disponibilidade"), "Click on Availability on main menu");
         }
         [TearDown]
@@ -44,12 +44,19 @@ namespace OrtogreenE2E.tests
             await CloseBrowserAsync();
         }
 
-[Test, Order(1)]
+        [Test, Order(1)]
         [AllureName("Should Create A New Availability")]
         public async Task Should_Create_A_New_Availability()
         {
             var availability = new AvailabilityPage(page);
             await availability.CreateNewAvailability();
+        }
+        [Test, Order(2)]
+        [AllureName("Should Delete Availability")]
+        public async Task Should_Delete_Availability()
+        {
+            var availability = new AvailabilityPage(page);
+            await availability.DeleteAvailability();
         }
 
     }
