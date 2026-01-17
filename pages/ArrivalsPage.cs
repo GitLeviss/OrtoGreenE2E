@@ -40,13 +40,13 @@ namespace OrtoGreenE2E.pages
         public string Obs { get; } = "Test " + number;
 
 
-
-
-        public async Task ScheduleAppointment()
+        public async Task ClickOnNewArrival()
         {
-            string status = "AGENDADA";
             await utils.Click(gen.LocatorSpanText(" Nova Consulta "), "Click on New to create a new schedule");
-            await Task.Delay(500);
+        }
+
+        public async Task FillFormOfAppointment()
+        {
             await utils.Click(gen.SelectOrder("1"), "Click on first select to select a patient");
             await utils.Click(gen.LocatorDiv(data.PatientName), "Set patient on select patient");
             await utils.Click(gen.SelectOrder("3"), "Click on select to expand dentist");
@@ -54,31 +54,38 @@ namespace OrtoGreenE2E.pages
             await utils.Click(gen.SelectOrder("4"), "Click on select to expand type of appointment");
             await utils.Click(gen.LocatorSpanText(data.TypeOfConsult), "Set type of consult on select order");
             await utils.Click(gen.RadioOrder("3"), "select disponibility time");
-            //await utils.Write(gen.LocatorPlaceholder("Observações sobre a consulta..."), Obs, "Insert observation");
-            await utils.Click(gen.LocatorSpanText(" Salvar Agendamento"), "Click on sabe appointment");
-            await utils.ValidateTextIsVisibleOnScreen("Consulta agendada com sucesso!", "Validate if success message is visible on screen of user");
-            await utils.ValidateElementIsVisibleOnScreen(gen.StatusOnTable(status), $"Validate if status on table is {status}");
+            await utils.Click(gen.LocatorSpanText(" Salvar Agendamento"), "Click on save appointment");
+        }
+
+        public async Task ValidateMessageVisible(string expectedTextIsVisible)
+        {
+            await utils.ValidateTextIsVisibleOnScreen(expectedTextIsVisible, $"Validate if success message /" +
+                $"{expectedTextIsVisible} /" +
+                $"is visible on screen of user");            
+        }
+
+        public async Task ValidateStatusOnTable(string expectedStatusArrival)
+        {
+            await utils.ValidateElementIsVisibleOnScreen(gen.StatusOnTable(expectedStatusArrival), $"Validate if status on table is {expectedStatusArrival}");
         }
 
         public async Task ConsultExistingAppointment()
         {
-
-            await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "insert patient name on search bar");
+            await utils.Write(gen.LocatorDiv("Paciente..."), data.PatientName, "insert patient name on search bar");
             await utils.Click(gen.ButtonExpand("1"), "Click on button to expand data of appointment");
-            await utils.ValidateElementIsVisibleOnScreen("("+gen.LocatorSpanText("AGENDADA")+")[1]", "Validate if obs messa is visible on table");
 
         }
 
         public async Task Checkin()
-        {            
+        {
             await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
             string quantityOfAppointments = await utils.GetTextOfElement(gen.LocatorDiv("Confirmadas") + "/following-sibling::div", "Get quantity of confirm appointments");
             int qtt1 = Convert.ToInt32(quantityOfAppointments);
-            await utils.Click("("+gen.LocatorSpanText("Confirmar")+")[1]", "Click on confirm button");
+            await utils.Click("(" + gen.LocatorSpanText("Confirmar") + ")[1]", "Click on confirm button");
             string quantityOfAppointmentsAfter = await utils.GetTextOfElement(gen.LocatorDiv("Confirmadas") + "/following-sibling::div", "Get quantity of confirm appointments");
             int qtt2 = Convert.ToInt32(quantityOfAppointmentsAfter);
             bool confirm = qtt2 > qtt1;
-            if (confirm) 
+            if (confirm)
             {
                 Console.WriteLine("Appointment confirmed");
             }
@@ -93,7 +100,7 @@ namespace OrtoGreenE2E.pages
             await utils.Click("(" + gen.LocatorSpanText("Chamar") + ")[1]", "Call patient to appointment");
             await utils.ValidateTextIsVisibleOnScreen("Paciente chamado com sucesso!", "Validate if call patient success message is visible");
         }
-        
+
 
         public async Task Started()
         {
@@ -115,7 +122,7 @@ namespace OrtoGreenE2E.pages
         {
 
             await utils.Write(gen.LocatorPlaceholder("Buscar por paciente, dentista ou tipo de consulta..."), data.PatientName, "Insert patient name on search field");
-            await utils.GetTextOfElementConvertToIntAndCompare(gen.InProgressCard,1, "Validate if status is in progress");
+            await utils.GetTextOfElementConvertToIntAndCompare(gen.InProgressCard, 1, "Validate if status is in progress");
 
         }
 
