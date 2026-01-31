@@ -37,6 +37,27 @@ namespace OrtoGreenE2E.pages
             await utils.Click(gen.LocatorDiv(data.paidDate), "select paid date");
             await utils.Click(gen.LocatorSpanText(" Salvar "), "click on save account payble button");
             await utils.ValidateTextIsVisibleOnScreen(data.successMessage, "Validate if message success be present on screen user");
+          
         }
+       
+
+        public async Task ConsultAccountPayble()
+        {
+            await utils.Write(gen.LocatorPlaceholder("Buscar por descrição, valor..."), data.description, "insert description on search field");
+            await utils.ValidateTextIsVisibleOnScreen(data.description, "Validate if account payble description is visible on table");
+        }
+
+        public async Task AccountPayment()
+        {
+            await utils.Write(gen.LocatorPlaceholder("Buscar por descrição, valor..."), data.description, "insert description on search field");
+            await utils.Click(gen.LocatorSpanText(" Pagar "), "click on pay button on account payble");
+            await utils.Click(gen.LocatorSpanText(" Confirmar "), "click on confirm pay button on modal");
+         
+        }
+
+
+
+      
+
     }
 }

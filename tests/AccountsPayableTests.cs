@@ -47,23 +47,39 @@ namespace OrtoGreenE2E.tests
             page = await OpenBrowserAsync();
             await CloseBrowserAsync();
         }
-        [Test]
+        [Test, Order(1)]
         [AllureName("Should create a new account payble")]
         public async Task Should_Create_A_New_Account_Payble()
+        {    
+            var accountPayblePage = new AccountPayblePage(page);
+             
+        }
+        [Test, Order(2)]
+        [AllureName("Should AccountPayment")]
+
+        public async Task Should_Account_Payment()
         {
-            //APAGA ISSO DAQUI, DADOS FICA NA CLASSE DE DADOS
-            var accountPaybleData = new OrtoGreenE2E.data.AccountPaybleData
-            {
-                description = "Electricity Bill",
-                value = "150.00",
-                type = "Utilities",
-                category = "Bills",
-                paidDate = "15",
-                successMessage = "Conta a pagar criada com sucesso"
-            };
-            var accountPayblePage = new OrtoGreenE2E.pages.AccountPayblePage(page, accountPaybleData);
-            await accountPayblePage.OpenAccountPayble();
+            var accountPayblePage = new AccountPayblePage(page);
+         
+
 
         }
+
+        [Test, Order(3)]
+        [AllureName("Should Consult a Account Payble")]
+        public async Task Should_Consult_A_Account_Payble()
+        {
+            var accountPayblePage = new AccountPayblePage(page);
+            
+        } [Test, Order(4)]
+        [AllureName("Should Payments")]
+        public async Task Should_Payments()
+        {
+            var accountPayblePage = new AccountPayblePage(page);
+           
+        }
+      
+        }
+
     }
-}
+
