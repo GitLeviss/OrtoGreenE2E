@@ -1,11 +1,10 @@
-﻿
+
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.pages;
 using OrtogreenE2E.runner;
 using OrtogreenE2E.utils;
-using OrtoGreenE2E.builders;
 using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
 using OrtoGreenE2E.pages;
@@ -52,12 +51,10 @@ namespace OrtogreenE2E.tests
         {   
             var dataTest = new ArrivalsData();
             var arrivals = new ArrivalsPage(page);
-            await new ArrivalsBuilder(arrivals)
-                .ClickOnNewArrival()
-                .FillFormOfAppointment()
-                .ValidateMessageVisible(dataTest.MessageArrivalBookingSuccessfuly)
-                .ValidateStatusInTable(dataTest.StatusOfArrival)
-                .Execute();
+            await arrivals.ClickOnNewArrival();
+            await arrivals.FillFormOfAppointment();
+            await arrivals.ValidateMessageVisible(dataTest.MessageArrivalBookingSuccessfuly);
+            await arrivals.ValidateStatusOnTable(dataTest.StatusOfArrival);
         }
         [Test, Order(2)]
         [AllureName("Should Consult a Arrival")]
