@@ -19,7 +19,7 @@ namespace OrtogreenE2E.pages
         GeneralElements gen = new GeneralElements();
         private readonly DentistsData data;
 
-        public DentistsPage(IPage page, DentistsData data = null)
+        public DentistsPage(IPage page, DentistsData? data = null)
         {
             this.page = page;
             this.data = data ?? new DentistsData();

@@ -1,15 +1,7 @@
-using Allure.Net.Commons;
-using Allure.NUnit.Attributes;
-using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.Playwright.Assertions;
+using Microsoft.Playwright;
 
 namespace OrtoGreenE2E.pages
 {
@@ -20,14 +12,12 @@ namespace OrtoGreenE2E.pages
         GeneralElements gen = new GeneralElements();
         private readonly ArrivalsData data;
 
-        public ArrivalsPage(IPage page, ArrivalsData data = null)
+        public ArrivalsPage(IPage page, ArrivalsData? data = null)
         {
             this.page = page;
             this.data = data ?? new ArrivalsData();
             utils = new Utils(page);
         }
-
-        string patientName = "User Teste";
 
         public static string UniqueNumber()
         {
@@ -61,7 +51,7 @@ namespace OrtoGreenE2E.pages
         {
             await utils.ValidateTextIsVisibleOnScreen(expectedTextIsVisible, $"Validate if success message /" +
                 $"{expectedTextIsVisible} /" +
-                $"is visible on screen of user");            
+                $"is visible on screen of user");
         }
 
         public async Task ValidateStatusOnTable(string expectedStatusArrival)

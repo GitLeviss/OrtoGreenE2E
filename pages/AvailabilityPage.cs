@@ -19,7 +19,7 @@ namespace OrtogreenE2E.pages
         GeneralElements gen = new GeneralElements();
         private readonly AvailabilityData data;
 
-        public AvailabilityPage(IPage page, AvailabilityData data = null)
+        public AvailabilityPage(IPage page, AvailabilityData? data = null)
         {
             this.page = page;
             this.data = data ?? new AvailabilityData();

@@ -1,4 +1,4 @@
-﻿using Allure.Net.Commons;
+using Allure.Net.Commons;
 using Microsoft.Playwright;
 using NUnit.Framework;
 using System;
@@ -105,7 +105,7 @@ namespace OrtoGreenE2E.utils
                 await assertionAction();
                 await CaptureAssertionScreenshotAsync(page, assertionName, stepDescription);
             }
-            catch (Exception ex)
+            catch
             {
                 await CaptureAssertionScreenshotAsync(page, $"{assertionName}_FAILED", stepDescription);
                 throw;

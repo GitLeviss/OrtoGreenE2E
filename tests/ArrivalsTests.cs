@@ -8,11 +8,6 @@ using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
 using OrtoGreenE2E.pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
@@ -48,7 +43,7 @@ namespace OrtogreenE2E.tests
         [Test, Order(1)]
         [AllureName("Should Register a New Arrival")]
         public async Task Should_Register_a_New_Arrival()
-        {   
+        {
             var dataTest = new ArrivalsData();
             var arrivals = new ArrivalsPage(page);
             await arrivals.ClickOnNewArrival();

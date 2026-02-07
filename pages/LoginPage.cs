@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
-using OrtoGreenE2E.locators;
+using OrtoGreenE2E.locators; 
 using static Microsoft.Playwright.Assertions;
 
 
 namespace OrtogreenE2E.pages
 {
-    public class LoginPage
+    public class LoginPage 
     {
         Utils utils;
         private readonly IPage page;
         GeneralElements gen = new GeneralElements();
         private readonly LoginData data;
-        public LoginPage(IPage page, LoginData data = null)
+        public LoginPage(IPage page, LoginData? data = null)
         {
             this.page = page;
             utils = new Utils(page);
