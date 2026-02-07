@@ -1,4 +1,4 @@
-﻿
+
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using Microsoft.Playwright;
@@ -8,11 +8,6 @@ using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
 using OrtoGreenE2E.locators;
 using OrtoGreenE2E.pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrtogreenE2E.tests
 {
@@ -36,7 +31,7 @@ namespace OrtogreenE2E.tests
             var login = new LoginPage(page);
             await login.Login();
             await utils.Click(gen.LocatorDiv("Agenda"), "Click on Schedule on main menu");
-            await utils.Click(gen.LocatorA("Controle de chegadas"), "Click on Arrivals control on main menu");
+            await utils.Click(gen.LocatorA("Chegadas"), "Click on Arrivals control on main menu");
         }
         [TearDown]
         [AllureAfter]
@@ -48,9 +43,13 @@ namespace OrtogreenE2E.tests
         [Test, Order(1)]
         [AllureName("Should Register a New Arrival")]
         public async Task Should_Register_a_New_Arrival()
-        {   
+        {
+            var dataTest = new ArrivalsData();
             var arrivals = new ArrivalsPage(page);
-            await arrivals.ScheduleAppointment();
+            await arrivals.ClickOnNewArrival();
+            await arrivals.FillFormOfAppointment();
+            await arrivals.ValidateMessageVisible(dataTest.MessageArrivalBookingSuccessfuly);
+            await arrivals.ValidateStatusOnTable(dataTest.StatusOfArrival);
         }
         [Test, Order(2)]
         [AllureName("Should Consult a Arrival")]
@@ -99,7 +98,7 @@ namespace OrtogreenE2E.tests
         public async Task Should_Contain_Canceled_In_Arrival()
         {
             var arrivals = new ArrivalsPage(page);
-            await arrivals.ScheduleAppointment();
+            await arrivals.FillFormOfAppointment();
             await arrivals.Canceled();
         }
 

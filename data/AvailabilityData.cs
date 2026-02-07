@@ -8,7 +8,7 @@ namespace OrtoGreenE2E.data
 {
     public class AvailabilityData
     {
-        public string DentistName { get; set; } = "Levi da Paz";
+        public string DentistName { get; set; } = "Dr. QA";
         public string Period { get; set; } = "Manhã";
         public string Observation { get; set; } = "teste";
     }

@@ -16,7 +16,7 @@ namespace OrtogreenE2E.runner
 {
     public class TestBase
     {
-        protected IPage page;
+        protected IPage? page;
         private IPlaywright? playwright;
         private IBrowser? browser;
         private IBrowserContext? context;

@@ -19,7 +19,7 @@ namespace OrtogreenE2E.pages
         GeneralElements gen = new GeneralElements();
         private readonly TypeScheduleData data;
 
-        public TypeSchedulePage(IPage page, TypeScheduleData data = null)
+        public TypeSchedulePage(IPage page, TypeScheduleData? data = null)
         {
             this.page = page;
             this.data = data ?? new TypeScheduleData();

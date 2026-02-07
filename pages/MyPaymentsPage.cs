@@ -1,7 +1,7 @@
-﻿using Microsoft.Playwright;
+using Microsoft.Playwright;
 using OrtogreenE2E.utils;
 using OrtoGreenE2E.data;
-using OrtoGreenE2E.locators;
+using OrtoGreenE2E.locators; 
 namespace OrtoGreenE2E.pages
 {
     public class MyPaymentsPage
@@ -11,7 +11,7 @@ namespace OrtoGreenE2E.pages
         MyPaymentsData data = new MyPaymentsData();
         private readonly IPage page;
 
-        public MyPaymentsPage(IPage page, MyPaymentsData data = null)
+        public MyPaymentsPage(IPage page, MyPaymentsData? data = null)
         {            
             this.page = page;
             utils = new Utils(page);
